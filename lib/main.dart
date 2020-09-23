@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'country_detail.dart';
 
@@ -14,31 +14,43 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: GoogleFonts.quicksandTextTheme(Theme
+            .of(context)
+            .textTheme),
         primarySwatch: Colors.blue,
         primaryColorDark: Colors.blueAccent,
         brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Covid 19 Tracker',
-            style: TextStyle(color: Colors.black87),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            iconTheme: IconThemeData(color: Colors.black87),
+            title: Text(
+              'Covid 19 Tracker',
+              style: TextStyle(color: Colors.black87),
+            ),
+            bottomOpacity: 0.0,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.info_outline),
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CountryDetail()));
+                },
+              )
+            ],
           ),
-          bottomOpacity: 0.0,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.local_airport),
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => CountryDetail()));
-              },
-            )
-          ],
-        ),
-        body: CountryList(),
+          body: CountryList(),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              // Add your onPressed code here!
+            },
+            label: Text('Add Countries'),
+            icon: Icon(Icons.search),
+            backgroundColor: Colors.pink,
+          ),
       ),
     );
   }
@@ -71,7 +83,6 @@ class CountryList extends StatelessWidget {
   }
 
   Widget _buildRow(String country, int death, BuildContext context) {
-    var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
@@ -102,7 +113,7 @@ class CountryList extends StatelessWidget {
                     Text(
                       death.toString() + " Infections",
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                       textAlign: TextAlign.left,
                     ),
                     Text("485784 Number of deaths")
@@ -117,21 +128,22 @@ class CountryList extends StatelessWidget {
                 width: 80,
                 height: 100,
                 child: Align(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.bottomRight,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 40,
-                        child: Sparkline(
-                          data: data,
-                          lineColor: Colors.green,
-                        ),
+                        height: 25,
+                        child: Text("+1,593", style: TextStyle(fontSize: 16,
+                            fontWeight: FontWeight.w800),),
                       ),
                       Container(
                         decoration: BoxDecoration(
                             color: Colors.green,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
-                        height: 20,
+                        alignment: Alignment.center,
+                        height: 25,
+                        width: 50,
                         child: Text(
                           "+12%",
                           style: TextStyle(
