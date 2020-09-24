@@ -1,3 +1,4 @@
+import 'package:covid19_app/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,75 +12,74 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        textTheme: GoogleFonts.quicksandTextTheme(Theme
-            .of(context)
-            .textTheme),
-        primarySwatch: Colors.blue,
-        primaryColorDark: Colors.blueAccent,
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            iconTheme: IconThemeData(color: Colors.black87),
-            title: Text(
-              'Covid 19 Tracker',
-              style: TextStyle(color: Colors.black87),
-            ),
-            bottomOpacity: 0.0,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.info_outline),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CountryDetail()));
-                },
-              )
-            ],
-          ),
-          body: CountryList(),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              // Add your onPressed code here!
-            },
-            label: Text('Add Countries'),
-            icon: Icon(Icons.search),
-            backgroundColor: Colors.pink,
-          ),
-      ),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          textTheme:
+              GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
+          primarySwatch: Colors.blue,
+          primaryColorDark: Colors.blueAccent,
+          brightness: Brightness.light,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: CountryList());
   }
 }
 
 class CountryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return (ListView(
-      children: [
-        _buildRow("assets/USA.png", 66849689, context),
-        Divider(height: 0.5, color: Colors.black26),
-        _buildRow("assets/Ethiopia.png", 5739574, context),
-        Divider(
-          height: 0.5,
-          color: Colors.black26,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.black87),
+        title: Text(
+          'Covid 19 Tracker',
+          style: TextStyle(color: Colors.black87),
         ),
-        _buildRow("assets/Israel.png", 4385, context),
-        Divider(
-          height: 0.5,
-          color: Colors.black26,
-        ),
-        _buildRow("assets/Kenya.png", 2943, context),
-        Divider(
-          height: 0.5,
-          color: Colors.black26,
-        ),
-      ],
-    ));
+        bottomOpacity: 0.0,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Search()));
+            },
+          )
+        ],
+      ),
+      body: ListView(
+        children: [
+          _buildRow("assets/USA.png", 66849689, context),
+          Divider(height: 0.5, color: Colors.black26),
+          _buildRow("assets/Ethiopia.png", 5739574, context),
+          Divider(
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          _buildRow("assets/Israel.png", 4385, context),
+          Divider(
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          _buildRow("assets/Kenya.png", 2943, context),
+          Divider(
+            height: 0.5,
+            color: Colors.black26,
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => Search()));
+        },
+        label: Text('Add Countries'),
+        icon: Icon(Icons.search),
+        backgroundColor: Colors.pink,
+      ),
+    );
   }
 
   Widget _buildRow(String country, int death, BuildContext context) {
@@ -113,7 +113,7 @@ class CountryList extends StatelessWidget {
                     Text(
                       death.toString() + " Infections",
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                       textAlign: TextAlign.left,
                     ),
                     Text("485784 Number of deaths")
@@ -134,8 +134,11 @@ class CountryList extends StatelessWidget {
                     children: [
                       Container(
                         height: 25,
-                        child: Text("+1,593", style: TextStyle(fontSize: 16,
-                            fontWeight: FontWeight.w800),),
+                        child: Text(
+                          "+1,593",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w800),
+                        ),
                       ),
                       Container(
                         decoration: BoxDecoration(
