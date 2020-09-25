@@ -1,5 +1,7 @@
 import 'package:covid19_app/Model/Country.dart';
+import 'package:covid19_app/Model/watchlistModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'country_detail.dart';
 
@@ -120,10 +122,32 @@ class Delegate extends SearchDelegate<String> {
               subtitle: Text("Estimated Population: " +
                   suggestion[index].population.toString()),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        CountryDetail(suggestion[index])));
+                List<Country> list = Provider.of<WatchlistModel>(context,
+                        listen: false)
+                    .items
+                    .where((element) => element.name == suggestion[index].name)
+                    .toList();
+
+                // check if the selected country is already in the watchlist
+                if (list.isNotEmpty &&
+                    countryChecker(suggestion[index], list[0])) {
+                  // country exists, retrieve model and pass to detail route
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CountryDetail(list[0])));
+                } else {
+                  // create new country model and pass to detail route
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CountryDetail(suggestion[index])));
+                }
               },
             ));
+  }
+
+  bool countryChecker(Country c1, Country c2) {
+    if (c1.name == c2.name) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
