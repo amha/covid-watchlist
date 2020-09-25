@@ -1,8 +1,13 @@
+import 'package:covid19_app/Model/Country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 //import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class CountryDetail extends StatelessWidget {
+  final Country model;
+
+  CountryDetail(this.model);
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -51,7 +56,7 @@ class CountryDetail extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  child: Image.asset("assets/Ethiopia.png"),
+                  child: Image.asset("assets/" + this.model.name.toString() + ".png"),
                   height: 120,
                   padding: EdgeInsets.all(8),
                 ),
@@ -60,11 +65,11 @@ class CountryDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Ethiopia",
+                      Text(this.model.name.toUpperCase(),
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w800)),
                       Text(
-                        "Est. Population: 123,583M",
+                        "Est. Population: " + this.model.population.toString(),
                         style: TextStyle(color: Colors.black87),
                       )
                     ],

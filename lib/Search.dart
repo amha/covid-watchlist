@@ -89,8 +89,9 @@ class Delegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     List<Country> suggestion;
     if (query.isEmpty) {
-      suggestion =
-          suggestions.entries.map((e) => Country(e.key, e.value)).toList();
+      suggestion = suggestions.entries
+          .map((e) => Country(e.key, e.value[0], e.value[1]))
+          .toList();
     } else {
       suggestion = listOfCountries(allCountries)
           .where((element) => element.name
@@ -103,7 +104,15 @@ class Delegate extends SearchDelegate<String> {
     return ListView.builder(
         itemCount: suggestion.length,
         itemBuilder: (context, index) => ListTile(
-              leading: Icon(Icons.location_city),
+              leading: suggestion[index].hasFlag
+                  ? Image.asset(
+                      'assets/' + suggestion[index].name + ".png",
+                      width: 48,
+                    )
+                  : Image.asset(
+                      'assets/Default.png',
+                      width: 40,
+                    ),
               title: Text(
                 suggestion[index].name,
                 style: TextStyle(fontWeight: FontWeight.w800),
@@ -111,9 +120,9 @@ class Delegate extends SearchDelegate<String> {
               subtitle: Text("Estimated Population: " +
                   suggestion[index].population.toString()),
               onTap: () {
-                print("Name: " + suggestion[index].name);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => CountryDetail()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        CountryDetail(suggestion[index])));
               },
             ));
   }

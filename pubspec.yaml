@@ -47,10 +47,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/USA.png
+    - assets/United States.png
     - assets/Ethiopia.png
     - assets/Israel.png
     - assets/Kenya.png
     - assets/search.png
+    - assets/Default.png
 
 

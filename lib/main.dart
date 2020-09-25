@@ -2,6 +2,7 @@ import 'package:covid19_app/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'Model/Country.dart';
 import 'country_detail.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'C19 Tracker',
         theme: ThemeData(
           textTheme:
               GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
@@ -34,7 +35,7 @@ class CountryList extends StatelessWidget {
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black87),
         title: Text(
-          'Covid 19 Tracker',
+          'Covid 19 Watchlist',
           style: TextStyle(color: Colors.black87),
         ),
         bottomOpacity: 0.0,
@@ -51,19 +52,19 @@ class CountryList extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          _buildRow("assets/USA.png", 66849689, context),
+          _buildRow(Country("United States", 66849689, true), context),
           Divider(height: 0.5, color: Colors.black26),
-          _buildRow("assets/Ethiopia.png", 5739574, context),
+          _buildRow(Country("Ethiopia", 5739574, true), context),
           Divider(
             height: 0.5,
             color: Colors.black26,
           ),
-          _buildRow("assets/Israel.png", 4385, context),
+          _buildRow(Country("Israel", 4385, true), context),
           Divider(
             height: 0.5,
             color: Colors.black26,
           ),
-          _buildRow("assets/Kenya.png", 2943, context),
+          _buildRow(Country("Kenya", 2943, true), context),
           Divider(
             height: 0.5,
             color: Colors.black26,
@@ -82,11 +83,11 @@ class CountryList extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(String country, int death, BuildContext context) {
+  Widget _buildRow(Country country, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CountryDetail()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CountryDetail(country)));
       },
       child: Container(
         height: 90,
@@ -99,7 +100,10 @@ class CountryList extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 width: 60,
                 height: 60,
-                child: Image.asset(country),
+                child: Image.asset(
+                  "assets/" + country.name + ".png",
+                  width: 48,
+                ),
               ),
             ),
             Expanded(
@@ -111,7 +115,7 @@ class CountryList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      death.toString() + " Infections",
+                      country.population.toString() + " Infections",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                       textAlign: TextAlign.left,
