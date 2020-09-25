@@ -1,6 +1,8 @@
 import 'package:covid19_app/Model/Country.dart';
+import 'package:covid19_app/Model/watchlistModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class CountryDetail extends StatelessWidget {
@@ -56,9 +58,12 @@ class CountryDetail extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  child: Image.asset("assets/" + this.model.name.toString() + ".png"),
+                  child: Image.asset(
+                    "assets/" + this.model.name.toString() + ".png",
+                    width: 48,
+                  ),
                   height: 120,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
                 ),
                 Container(
                   child: Column(
@@ -247,17 +252,17 @@ class CountryDetail extends StatelessWidget {
               // disabledTextColor: Colors.black,
               padding: const EdgeInsets.all(20),
               textColor: Colors.white,
-              color: Colors.pink,
+              color: Colors.black87,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onPressed: () {
-                //TODO
-                print("load webview");
-                //final webiew = new FlutterWebviewPlugin();
-                //webiew.launch("https://www.ephi.gov.et/images/novel_coronavirus/EPHI_PHEOC_COVID-19_Child_Protection_During_COVID-19_Pandemic_Guide_English.pdf");
+                Provider.of<WatchlistModel>(context, listen: false)
+                    .addCountry(this.model);
               },
-              child: Text('Latest health tips'),
+              child: Text(this.model.inWatchList
+                  ? 'Latest health tips'
+                  : "Add to Watchlist"),
             ),
           ),
         ],

@@ -45,10 +45,16 @@ class Country {
   String name;
   int population;
   bool hasFlag;
+  bool inWatchList;
 
   Country(String name, int population, bool flag) {
     this.name = name;
     this.population = population;
     this.hasFlag = flag;
+    this.inWatchList = false;
+  }
+
+  void addToWatchlist() {
+    this.inWatchList = true;
   }
 }
