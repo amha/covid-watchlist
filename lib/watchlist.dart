@@ -1,4 +1,5 @@
 import 'package:covid19_app/Model/watchlistModel.dart';
+import 'package:covid19_app/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,11 @@ class Watchlist extends StatelessWidget {
         bottomOpacity: 0.0,
         elevation: 0,
         actions: [
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: Delegate());
+              }),
           IconButton(
             icon: Icon(Icons.remove_circle),
             onPressed: () {
@@ -51,7 +57,10 @@ class Watchlist extends StatelessWidget {
                               "assets/" + watchlist.items[index].name + ".png",
                               width: 48,
                             )
-                          : Image.asset('assets/Default.png'),
+                          : Image.asset(
+                              'assets/Default.png',
+                              width: 48,
+                            ),
                       trailing: Expanded(
                         flex: 1,
                         child: Container(
@@ -93,8 +102,7 @@ class Watchlist extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => Search()));
+          showSearch(context: context, delegate: Delegate());
         },
         label: Text('Add Countries'),
         icon: Icon(Icons.search),

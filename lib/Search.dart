@@ -5,58 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'country_detail.dart';
 
-class Search extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Search',
-          style: TextStyle(color: Colors.black87),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black87),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: Delegate());
-            },
-          )
-        ],
-      ),
-      body: SizedBox(
-        width: size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                margin: EdgeInsets.fromLTRB(0, 120, 0, 16),
-                height: 200,
-                width: 200,
-                child: Image.asset('assets/search.png')),
-            Text(
-              "Search by country name",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(32, 16, 32, 10),
-              child: Text(
-                "You can add countries to your watchlist and track their progress.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class Delegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {

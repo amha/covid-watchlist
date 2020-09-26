@@ -1,7 +1,6 @@
 import 'package:covid19_app/Model/Country.dart';
 import 'package:covid19_app/Model/watchlistModel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:provider/provider.dart';
 
 class CountryDetail extends StatefulWidget {
@@ -14,6 +13,7 @@ class CountryDetail extends StatefulWidget {
 }
 
 class _CountryDetailState extends State<CountryDetail> {
+  GlobalKey key = new GlobalKey();
   bool isInWatchlist;
 
   @override
@@ -183,81 +183,81 @@ class _CountryDetailState extends State<CountryDetail> {
                 ],
               ),
             ),
-            Container(
-                height: 240,
-                margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        spreadRadius: 6,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ]),
-                child: Column(
-                  children: [
-                    Container(
-                      child: Text(
-                        "Infections: last 7 days",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(16),
-                      height: 80,
-                      child: Sparkline(
-                        data: [
-                          0.0,
-                          1.0,
-                          1.5,
-                          2.0,
-                          1.0,
-                          1.5,
-                          -0.5,
-                          -1.0,
-                          -0.5,
-                          0.0,
-                          -0.5,
-                          -1.0,
-                          -0.5,
-                          0.0,
-                        ],
-                        lineColor: Colors.green,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.account_circle),
-                        Text(
-                          "  Cases per 10k: 134   ",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                        Icon(Icons.apps),
-                        Text(
-                          "  No. of tests: 25k",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                )),
+            // Container(
+            //     height: 240,
+            //     margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
+            //     padding: EdgeInsets.all(16),
+            //     decoration: BoxDecoration(
+            //         color: Colors.grey[50],
+            //         borderRadius: BorderRadius.all(
+            //           Radius.circular(8),
+            //         ),
+            //         boxShadow: [
+            //           BoxShadow(
+            //             color: Colors.grey.withOpacity(0.15),
+            //             spreadRadius: 6,
+            //             blurRadius: 5,
+            //             offset: Offset(0, 3), // changes position of shadow
+            //           ),
+            //         ]),
+            //     child: Column(
+            //       children: [
+            //         Container(
+            //           child: Text(
+            //             "Infections: last 7 days",
+            //             textAlign: TextAlign.center,
+            //             style: TextStyle(
+            //               fontSize: 14,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+            //         ),
+            //         Container(
+            //           margin: EdgeInsets.all(16),
+            //           height: 80,
+            //           child: Sparkline(
+            //             data: [
+            //               0.0,
+            //               1.0,
+            //               1.5,
+            //               2.0,
+            //               1.0,
+            //               1.5,
+            //               -0.5,
+            //               -1.0,
+            //               -0.5,
+            //               0.0,
+            //               -0.5,
+            //               -1.0,
+            //               -0.5,
+            //               0.0,
+            //             ],
+            //             lineColor: Colors.green,
+            //           ),
+            //         ),
+            //         Row(
+            //           children: [
+            //             Icon(Icons.account_circle),
+            //             Text(
+            //               "  Cases per 10k: 134   ",
+            //               style: TextStyle(
+            //                 fontSize: 12,
+            //                 fontWeight: FontWeight.w200,
+            //               ),
+            //             ),
+            //             Icon(Icons.apps),
+            //             Text(
+            //               "  No. of tests: 25k",
+            //               style: TextStyle(
+            //                 fontSize: 12,
+            //                 fontWeight: FontWeight.w200,
+            //               ),
+            //             ),
+            //           ],
+            //         )
+            //       ],
+            //     )),
             Container(
               margin: EdgeInsets.all(16),
               width: size.width - 32,
@@ -292,12 +292,12 @@ class _CountryDetailState extends State<CountryDetail> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       onPressed: () {
-                        //Scaffold.of(context).showSnackBar(countryAddedSnackBar);
+                        _showDialog();
+                        widget.model.addToWatchlist();
+                        Provider.of<WatchlistModel>(context, listen: false)
+                            .addCountry(widget.model);
                         setState(() {
                           this.isInWatchlist = true;
-                          widget.model.addToWatchlist();
-                          Provider.of<WatchlistModel>(context, listen: false)
-                              .addCountry(widget.model);
                         });
                       },
                       child: Text(widget.model.inWatchList
@@ -308,6 +308,29 @@ class _CountryDetailState extends State<CountryDetail> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Added to Watchlist"),
+          content: new Text("Nice. Keep building."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
