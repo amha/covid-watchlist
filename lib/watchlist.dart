@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Search.dart';
+import 'country_detail.dart';
 
 class Watchlist extends StatelessWidget {
   @override
@@ -21,7 +22,8 @@ class Watchlist extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.remove_circle),
             onPressed: () {
-              Provider.of<WatchlistModel>(context,listen: true).items.clear();
+              Provider.of<WatchlistModel>(context, listen: false)
+                  .clearWatchlist();
             },
           )
         ],
@@ -29,15 +31,17 @@ class Watchlist extends StatelessWidget {
       body: Consumer<WatchlistModel>(
         builder: (context, watchlist, child) => (watchlist.items.length == 0)
             ? Container(
-                width: 200,
-                height: 200,
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                margin: EdgeInsets.all(32),
                 alignment: Alignment.center,
                 child: Text(
-                  "Empty List",
+                  "Build your watchlist",
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                 ))
             : ListView.builder(
                 itemCount: watchlist.items.length,
+                itemExtent: 90,
                 itemBuilder: (context, index) => ListTile(
                       title: Text(watchlist.items[index].name),
                       subtitle:
@@ -48,6 +52,43 @@ class Watchlist extends StatelessWidget {
                               width: 48,
                             )
                           : Image.asset('assets/Default.png'),
+                      trailing: Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          width: 80,
+                          height: 100,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  alignment: Alignment.center,
+                                  height: 25,
+                                  width: 50,
+                                  child: Text(
+                                    "+12%",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                CountryDetail(watchlist.items[index])));
+                      },
                     )),
       ),
       floatingActionButton: FloatingActionButton.extended(
