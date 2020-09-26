@@ -4,10 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:provider/provider.dart';
 
-class CountryDetail extends StatelessWidget {
+class CountryDetail extends StatefulWidget {
   final Country model;
 
-  CountryDetail(this.model);
+  const CountryDetail(this.model);
+
+  @override
+  _CountryDetailState createState() => _CountryDetailState();
+}
+
+class _CountryDetailState extends State<CountryDetail> {
+  bool isInWatchlist;
+
+  @override
+  void initState() {
+    super.initState();
+    this.isInWatchlist = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +72,7 @@ class CountryDetail extends StatelessWidget {
                 children: [
                   Container(
                     child: Image.asset(
-                      "assets/" + this.model.name.toString() + ".png",
+                      "assets/" + widget.model.name.toString() + ".png",
                       width: 48,
                     ),
                     height: 120,
@@ -70,12 +83,12 @@ class CountryDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(this.model.name.toUpperCase(),
+                        Text(widget.model.name.toUpperCase(),
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.w800)),
                         Text(
                           "Est. Population: " +
-                              this.model.population.toString(),
+                              widget.model.population.toString(),
                           style: TextStyle(color: Colors.black87),
                         )
                       ],
@@ -248,7 +261,7 @@ class CountryDetail extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(16),
               width: size.width - 32,
-              child: this.model.inWatchList
+              child: widget.model.inWatchList
                   ? RaisedButton(
                       // country in watchlist, display remove button
                       padding: const EdgeInsets.all(20),
@@ -260,7 +273,7 @@ class CountryDetail extends StatelessWidget {
                       onPressed: () {
                         //Scaffold.of(context).showSnackBar(countryRemovedSnackBar);
                         Provider.of<WatchlistModel>(context, listen: false)
-                            .removeCountry(this.model);
+                            .removeCountry(widget.model);
                       },
                       child: Text(
                         "Remove from Watchlist",
@@ -280,11 +293,14 @@ class CountryDetail extends StatelessWidget {
                       ),
                       onPressed: () {
                         //Scaffold.of(context).showSnackBar(countryAddedSnackBar);
-                        this.model.addToWatchlist();
-                        Provider.of<WatchlistModel>(context, listen: false)
-                            .addCountry(this.model);
+                        setState(() {
+                          this.isInWatchlist = true;
+                          widget.model.addToWatchlist();
+                          Provider.of<WatchlistModel>(context, listen: false)
+                              .addCountry(widget.model);
+                        });
                       },
-                      child: Text(this.model.inWatchList
+                      child: Text(widget.model.inWatchList
                           ? 'Latest health tips'
                           : "Add to Watchlist"),
                     ),
