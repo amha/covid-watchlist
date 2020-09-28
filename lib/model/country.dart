@@ -37,7 +37,6 @@ final Map<String, List> suggestions = {
 };
 
 List<Country> listOfCountries(Map map) {
-  print(map.toString());
   return map.entries
       .map((e) => Country(e.key, e.value[0], e.value[1]))
       .toList();

@@ -1,4 +1,4 @@
-import 'package:covid19_app/Model/Country.dart';
+import 'package:covid19_app/model/country.dart';
 import 'package:flutter/material.dart';
 
 class WatchlistModel extends ChangeNotifier {
