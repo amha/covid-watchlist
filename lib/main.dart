@@ -1,4 +1,4 @@
-import 'package:covid19_app/Model/watchlistModel.dart';
+import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/screens/watchlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

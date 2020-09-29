@@ -1,4 +1,5 @@
 import 'package:covid19_app/model/watchlistModel.dart';
+import 'package:covid19_app/screens/global_snapshot.dart';
 import 'package:covid19_app/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,51 +12,56 @@ class Watchlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 400) {
-          // build desktop view
-          return Scaffold(
-            appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.black87),
-              title: Text(
-                "Covid-19 Watchlist",
-                style: TextStyle(color: Colors.black87),
-              ),
-              backgroundColor: Colors.white,
-              actions: [
-                IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      showSearch(context: context, delegate: Delegate());
-                    }),
-                IconButton(
-                  icon: Icon(Icons.remove_circle),
+        // build desktop view
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.white),
+            title: Text(
+              "Covid-19 Watchlist",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Color(0xFF202BFF),
+            actions: [
+              IconButton(
+                  icon: Icon(Icons.insert_chart),
                   onPressed: () {
-                    Provider.of<WatchlistModel>(context, listen: false)
-                        .clearWatchlist();
-                  },
-                )
-              ],
-            ),
-            body: _buildWeb(context),
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
-                showSearch(context: context, delegate: Delegate());
-              },
-              label: Text('Add Countries'),
-              icon: Icon(Icons.search),
-              backgroundColor: Colors.black87,
-            ),
-          );
-        } else {
-          // screen size less than 400, return mobile view
-          return _buildMobile(context);
-        }
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => GlobalSnapshot()));
+                  }),
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    showSearch(context: context, delegate: Delegate());
+                  }),
+              IconButton(
+                icon: Icon(Icons.remove_circle),
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .clearWatchlist();
+                },
+              )
+            ],
+          ),
+          // build responsive UI
+          body: constraints.maxWidth > 500
+              ? _buildWeb(context)
+              : _buildMobile(context),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              showSearch(context: context, delegate: Delegate());
+            },
+            label: Text('Add Countries'),
+            icon: Icon(Icons.search),
+            backgroundColor: Colors.black87,
+          ),
+        );
       },
     );
   }
 
   Widget _buildWeb(BuildContext context) {
     return Container(
+      color: Color(0xFFF0F1F4),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,7 +69,7 @@ class Watchlist extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.lightBlue[50],
+              color: Color(0xFFF0F1F4),
               child: _buildWebList(context),
             ),
           ),
@@ -80,30 +86,7 @@ class Watchlist extends StatelessWidget {
   }
 
   Widget _buildMobile(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black87),
-        title: Text(
-          'Covid-19 Watchlist',
-          style: TextStyle(color: Colors.black87),
-        ),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: Delegate());
-              }),
-          IconButton(
-            icon: Icon(Icons.remove_circle),
-            onPressed: () {
-              Provider.of<WatchlistModel>(context, listen: false)
-                  .clearWatchlist();
-            },
-          )
-        ],
-      ),
-      body: Consumer<WatchlistModel>(
+    return Consumer<WatchlistModel>(
         builder: (context, watchlist, child) => (watchlist.items.length == 0)
             ? _buildEmptyWatchlistScreen(context)
             : ListView.builder(
@@ -159,17 +142,7 @@ class Watchlist extends StatelessWidget {
                             builder: (context) =>
                                 CountryDetail(watchlist.items[index])));
                       },
-                    )),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showSearch(context: context, delegate: Delegate());
-        },
-        label: Text('Add Countries'),
-        icon: Icon(Icons.search),
-        backgroundColor: Colors.black87,
-      ),
-    );
+                    )));
   }
 
   _buildEmptyWatchlistScreen(BuildContext context) {
