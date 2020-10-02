@@ -14,13 +14,11 @@ class Watchlist extends StatelessWidget {
       builder: (context, constraints) {
         // build desktop view
         return Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
-            title: Text(
-              "Covid-19 Watchlist",
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Color(0xFF202BFF),
+            iconTheme: Theme.of(context).appBarTheme.iconTheme,
+            title: Text("Covid-19 Watchlist"),
+            backgroundColor: Theme.of(context).appBarTheme.color,
             actions: [
               IconButton(
                   icon: Icon(Icons.insert_chart),
@@ -50,9 +48,9 @@ class Watchlist extends StatelessWidget {
             onPressed: () {
               showSearch(context: context, delegate: Delegate());
             },
-            label: Text('Add Countries'),
-            icon: Icon(Icons.search),
-            backgroundColor: Colors.black87,
+            label: Text('ADD COUNTRY'),
+            icon: Icon(Icons.add),
+            backgroundColor: Theme.of(context).accentColor,
           ),
         );
       },
