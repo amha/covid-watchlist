@@ -1,6 +1,6 @@
 import 'package:covid19_app/model/watchlistModel.dart';
-import 'package:covid19_app/screens/global_snapshot.dart';
-import 'package:covid19_app/screens/search.dart';
+import 'package:covid19_app/view/global_snapshot.dart';
+import 'package:covid19_app/view/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

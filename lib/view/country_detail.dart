@@ -234,9 +234,7 @@ class _CountryDetailState extends State<CountryDetail> {
                           widget.model.inWatchList = true;
                         });
                       },
-                      child: Text(widget.model.inWatchList
-                          ? 'Latest health tips'
-                          : "Add to Watchlist"),
+                      child: Text("Add to Watchlist"),
                     ),
             ),
           ],

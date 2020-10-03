@@ -1,5 +1,5 @@
 import 'package:covid19_app/model/watchlistModel.dart';
-import 'package:covid19_app/screens/watchlist.dart';
+import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +37,6 @@ class MyApp extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         fontSize: 18)),
                 iconTheme: IconThemeData(color: Color(0xFF202BFF)))),
-        home: Watchlist());
+        home: GlobalSnapshot());
   }
 }
