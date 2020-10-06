@@ -40,64 +40,56 @@ class _GlobalSnapshopState extends State<GlobalSnapshot> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Global Snapshot"),
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        elevation: Theme.of(context).appBarTheme.elevation,
-      ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: data.length == 0
-              ? Expanded(
-                  child: Container(
-                  child: Text(
-                    "Loading",
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                ))
-              : ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) => Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide.none,
-                                right: BorderSide.none,
-                                left: BorderSide.none,
-                                bottom: BorderSide(
-                                    width: 0.0,
-                                    color: Theme.of(context).accentColor))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
+    return Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: data.length == 0
+            ? Expanded(
+                child: Container(
+                child: Text(
+                  "Loading",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ))
+            : ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) => Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide.none,
+                              right: BorderSide.none,
+                              left: BorderSide.none,
+                              bottom: BorderSide(
+                                  width: 0.0,
+                                  color: Theme.of(context).accentColor))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Container(
+                                padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                                height: 72,
+                                alignment: Alignment.centerLeft,
+                                child: Text(data[index].name,
+                                    style: GoogleFonts.quicksand(
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2))),
+                          ),
+                          Expanded(
                               child: Container(
-                                  padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-                                  height: 72,
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(data[index].name,
-                                      style: GoogleFonts.quicksand(
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2))),
+                            height: 72,
+                            padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              data[index].value,
+                              style: GoogleFonts.quicksand(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyText1),
                             ),
-                            Expanded(
-                                child: Container(
-                              height: 72,
-                              padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                data[index].value,
-                                style: GoogleFonts.quicksand(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyText1),
-                              ),
-                            ))
-                          ],
-                        ),
-                      ))),
-    );
+                          ))
+                        ],
+                      ),
+                    )));
   }
 }
