@@ -22,11 +22,13 @@ class _CountryDetailState extends State<CountryDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery
+        .of(context)
+        .size;
 
     return Scaffold(
       backgroundColor:
-          widget.model.inWatchList ? Colors.black87 : Colors.transparent,
+      widget.model.inWatchList ? Colors.black87 : Colors.transparent,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -75,13 +77,13 @@ class _CountryDetailState extends State<CountryDetail> {
                   Container(
                     child: widget.model.hasFlag
                         ? Image.asset(
-                            "assets/" + widget.model.name.toString() + ".png",
-                            width: 48,
-                          )
+                      "assets/" + widget.model.name.toString() + ".png",
+                      width: 48,
+                    )
                         : Image.asset(
-                            'assets/Default.png',
-                            width: 48,
-                          ),
+                      'assets/Default.png',
+                      width: 48,
+                    ),
                     height: 120,
                     padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
                   ),
@@ -195,47 +197,47 @@ class _CountryDetailState extends State<CountryDetail> {
               width: size.width - 32,
               child: widget.model.inWatchList
                   ? RaisedButton(
-                      // country in watchlist, display remove button
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.red[50],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40.0),
-                      ),
-                      onPressed: () {
-                        Provider.of<WatchlistModel>(context, listen: false)
-                            .removeCountry(widget.model);
-                        setState(() {
-                          widget.model.inWatchList = false;
-                        });
-                      },
-                      child: Text(
-                        "Remove from Watchlist",
-                        style: TextStyle(
-                            color: Colors.red[800],
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
+                // country in watchlist, display remove button
+                padding: const EdgeInsets.all(20),
+                textColor: Colors.white,
+                color: Colors.red[50],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40.0),
+                ),
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .removeCountry(widget.model);
+                  setState(() {
+                    widget.model.inWatchList = false;
+                  });
+                },
+                child: Text(
+                  "Remove from Watchlist",
+                  style: TextStyle(
+                      color: Colors.red[800],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
                   : RaisedButton(
-                      // Country not in watchlist, display add button
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.black87,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      onPressed: () {
-                        //_showDialog();
-                        widget.model.addToWatchlist();
-                        Provider.of<WatchlistModel>(context, listen: false)
-                            .addCountry(widget.model);
-                        setState(() {
-                          widget.model.inWatchList = true;
-                        });
-                      },
-                      child: Text("Add to Watchlist"),
-                    ),
+                // Country not in watchlist, display add button
+                padding: const EdgeInsets.all(20),
+                textColor: Colors.white,
+                color: Colors.black87,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                onPressed: () {
+                  //_showDialog();
+                  widget.model.addToWatchlist();
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .addCountry(widget.model);
+                  setState(() {
+                    widget.model.inWatchList = true;
+                  });
+                },
+                child: Text("Add to Watchlist"),
+              ),
             ),
           ],
         ),

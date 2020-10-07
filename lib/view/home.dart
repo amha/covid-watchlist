@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/offline.dart';
+import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,6 @@ class _WatchlistState extends State<Watchlist> {
   void initState() {
     super.initState();
 
-    print(ConnectionState.none.runtimeType.toString());
     initConnectivity();
     _connectivitySubscription =
         _networkWrapper.onConnectivityChanged.listen(_updateConnectionStatus);
@@ -48,12 +48,11 @@ class _WatchlistState extends State<Watchlist> {
     List<Widget> viewPager = [
       GlobalSnapshot(),
       _buildMobile(context),
-      Text("Hi")
+      SafetyTips()
     ];
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // build desktop view
         return Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
@@ -81,12 +80,10 @@ class _WatchlistState extends State<Watchlist> {
               )
             ],
           ),
-          // build responsive UI
           body: _connectionStatus == ConnectionState.none ||
                   _connectionStatus == null
               ? Offline()
               : viewPager.elementAt(bottomNavigationIndex),
-
           bottomNavigationBar: SizedBox(
             height: 70,
             child: BottomNavigationBar(
@@ -113,31 +110,31 @@ class _WatchlistState extends State<Watchlist> {
     });
   }
 
-  Widget _buildWeb(BuildContext context) {
-    return Container(
-      color: Color(0xFFF0F1F4),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Color(0xFFF0F1F4),
-              child: _buildWebList(context),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              color: Colors.white,
-              child: _buildEmptyWatchlistScreen(context),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _buildWeb(BuildContext context) {
+  //   return Container(
+  //     color: Color(0xFFF0F1F4),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.max,
+  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+  //       children: [
+  //         Expanded(
+  //           flex: 1,
+  //           child: Container(
+  //             color: Color(0xFFF0F1F4),
+  //             child: _buildWebList(context),
+  //           ),
+  //         ),
+  //         Expanded(
+  //           flex: 3,
+  //           child: Container(
+  //             color: Colors.white,
+  //             child: _buildEmptyWatchlistScreen(context),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMobile(BuildContext context) {
     return Consumer<WatchlistModel>(
@@ -222,10 +219,10 @@ class _WatchlistState extends State<Watchlist> {
   }
 
   // revisit responsive at a later stage
-  _buildWebList(BuildContext context) {
-    //List savedCountries = Provider.of<WatchlistModel>(context).items.toList();
-    return Text("We got nothing");
-  }
+  // _buildWebList(BuildContext context) {
+  //   //List savedCountries = Provider.of<WatchlistModel>(context).items.toList();
+  //   return Text("We got nothing");
+  // }
 
   // boilerplate from connectivity plug-in
   Future<void> initConnectivity() async {

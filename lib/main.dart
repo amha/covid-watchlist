@@ -16,9 +16,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'C19 Tracker',
         theme: ThemeData(
-            // text
+          // text
             textTheme:
-                GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
+            GoogleFonts.quicksandTextTheme(Theme
+                .of(context)
+                .textTheme),
             // colors
             brightness: Brightness.light,
             primaryColor: Color(0xFF202BFF),
@@ -40,7 +42,10 @@ class MyApp extends StatelessWidget {
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
                 selectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
-                selectedItemColor: Theme.of(context).appBarTheme.color,
+                selectedItemColor: Theme
+                    .of(context)
+                    .appBarTheme
+                    .color,
                 unselectedItemColor: Colors.black,
                 backgroundColor: Colors.white,
                 elevation: 0)),
