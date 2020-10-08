@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:covid19_app/model/covid_statistic.dart';
-import 'package:covid19_app/utils/text_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 class GlobalSnapshot extends StatefulWidget {
+  List<CovidStatistic> globalData = [];
+
+  GlobalSnapshot(this.globalData);
+
   @override
   _GlobalSnapshopState createState() {
     return _GlobalSnapshopState();
@@ -14,28 +14,28 @@ class GlobalSnapshot extends StatefulWidget {
 }
 
 class _GlobalSnapshopState extends State<GlobalSnapshot> {
-  void fetchData() async {
-    final response = await http.get(
-        'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
-
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body)['data'];
-    List<CovidStatistic> rates = [];
-
-    jsonResponse.forEach((k, v) {
-      CovidStatistic dataItem = new CovidStatistic(formatCovidStatName(k), v);
-      rates.add(dataItem);
-    });
-    setState(() {
-      data = rates;
-    });
-  }
+  // void fetchData() async {
+  //   final response = await http.get(
+  //       'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
+  //
+  //   Map<String, dynamic> jsonResponse = jsonDecode(response.body)['data'];
+  //   List<CovidStatistic> rates = [];
+  //
+  //   jsonResponse.forEach((k, v) {
+  //     CovidStatistic dataItem = new CovidStatistic(formatCovidStatName(k), v);
+  //     rates.add(dataItem);
+  //   });
+  //   setState(() {
+  //     data = rates;
+  //   });
+  //}
 
   List<CovidStatistic> data = [];
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    data = widget.globalData;
   }
 
   @override

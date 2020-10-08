@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/offline.dart';
@@ -16,8 +17,12 @@ import 'country_detail.dart';
 import 'search.dart';
 
 class Watchlist extends StatefulWidget {
+  List<CovidStatistic> globalData = [];
+
   @override
   State<StatefulWidget> createState() => _WatchlistState();
+
+  Watchlist(this.globalData);
 }
 
 class _WatchlistState extends State<Watchlist> {
@@ -46,7 +51,7 @@ class _WatchlistState extends State<Watchlist> {
   @override
   Widget build(BuildContext context) {
     List<Widget> viewPager = [
-      GlobalSnapshot(),
+      GlobalSnapshot(widget.globalData),
       _buildMobile(context),
       SafetyTips()
     ];
@@ -57,15 +62,9 @@ class _WatchlistState extends State<Watchlist> {
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
             iconTheme: Theme.of(context).appBarTheme.iconTheme,
-            title: Text("$_connectionStatus"),
+            title: Text("Covid 19 Tracker"),
             backgroundColor: Theme.of(context).appBarTheme.color,
             actions: [
-              IconButton(
-                  icon: Icon(Icons.insert_chart),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GlobalSnapshot()));
-                  }),
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
