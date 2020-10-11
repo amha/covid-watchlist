@@ -1,6 +1,6 @@
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class GlobalSnapshot extends StatefulWidget {
   List<CovidStatistic> globalData = [];
@@ -14,22 +14,6 @@ class GlobalSnapshot extends StatefulWidget {
 }
 
 class _GlobalSnapshopState extends State<GlobalSnapshot> {
-  // void fetchData() async {
-  //   final response = await http.get(
-  //       'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
-  //
-  //   Map<String, dynamic> jsonResponse = jsonDecode(response.body)['data'];
-  //   List<CovidStatistic> rates = [];
-  //
-  //   jsonResponse.forEach((k, v) {
-  //     CovidStatistic dataItem = new CovidStatistic(formatCovidStatName(k), v);
-  //     rates.add(dataItem);
-  //   });
-  //   setState(() {
-  //     data = rates;
-  //   });
-  //}
-
   List<CovidStatistic> data = [];
 
   @override
@@ -40,56 +24,247 @@ class _GlobalSnapshopState extends State<GlobalSnapshot> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: data.length == 0
-            ? Expanded(
-                child: Container(
-                child: Text(
-                  "Loading",
-                  style: Theme.of(context).textTheme.headline5,
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(8, 16, 8, 8),
+          height: 120,
+          width: double.infinity,
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  "Global Covid-19 infections",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ))
-            : ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) => Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              top: BorderSide.none,
-                              right: BorderSide.none,
-                              left: BorderSide.none,
-                              bottom: BorderSide(
-                                  width: 0.0,
-                                  color: Theme.of(context).accentColor))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: Container(
-                                padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-                                height: 72,
-                                alignment: Alignment.centerLeft,
-                                child: Text(data[index].name,
-                                    style: GoogleFonts.quicksand(
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2))),
-                          ),
-                          Expanded(
-                              child: Container(
-                            height: 72,
-                            padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              data[index].value,
-                              style: GoogleFonts.quicksand(
-                                  textStyle:
-                                      Theme.of(context).textTheme.bodyText1),
-                            ),
-                          ))
-                        ],
+                Text(
+                  data[0].value.toString(),
+                  style: TextStyle(fontSize: 48),
+                )
+              ],
+            ),
+          ),
+        ),
+        Container(
+          height: 270,
+          width: double.infinity,
+          child: DoughtnutPie.withSampleData(),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              height: 60,
+              width: 120,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  color: Colors.blue[50],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.10),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 10,
+                        height: 10,
+                        child: CustomPaint(
+                          painter: DrawCircle(Colors.green),
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text("Infected"), Text(data[4].value)],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 60,
+              width: 120,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  color: Colors.blue[50],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.10),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 10,
+                        height: 10,
+                        child: CustomPaint(
+                          painter: DrawCircle(Colors.amber[400]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text("Recovered"), Text(data[1].value)],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 60,
+              width: 120,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  color: Colors.blue[50],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.10),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 10,
+                        height: 10,
+                        child: CustomPaint(
+                          painter: DrawCircle(Colors.red[400]),
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Deaths",
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
-                    )));
+                      Text(data[2].value)
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        )
+      ],
+    ));
+  }
+}
+
+class DoughtnutHoles {
+  final int index;
+  final int value;
+
+  DoughtnutHoles(this.index, this.value);
+}
+
+class DoughtnutPie extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  DoughtnutPie(this.seriesList, {this.animate});
+
+  /// Creates a [PieChart] with sample data and no transition.
+  factory DoughtnutPie.withSampleData() {
+    return new DoughtnutPie(
+      _dataTransformation(),
+      // Disable animations for image tests.
+      animate: false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return charts.PieChart(seriesList,
+        animate: animate,
+
+        // Configure the width of the pie slices to 60px. The remaining space in
+        // the chart will be left as a hole in the center.
+        defaultRenderer: new charts.ArcRendererConfig(arcWidth: 16));
+  }
+
+  static List<charts.Series<DoughtnutHoles, int>> _dataTransformation() {
+    final data = [
+      DoughtnutHoles(0, 80),
+      DoughtnutHoles(1, 20),
+      DoughtnutHoles(2, 10),
+    ];
+    return [
+      new charts.Series<DoughtnutHoles, int>(
+          id: 'Sales',
+          domainFn: (DoughtnutHoles sales, _) => sales.index,
+          measureFn: (DoughtnutHoles sales, _) => sales.value,
+          data: data,
+          colorFn: (DoughtnutHoles sales, _) {
+            switch (sales.index) {
+              case 0:
+                return charts.Color.fromHex(code: '#3ECB45');
+              case 1:
+                return charts.Color.fromHex(code: '#F5E93A');
+              case 2:
+                return charts.Color.fromHex(code: '#E25B5B');
+              default:
+                return charts.Color.fromHex(code: '#4B4FFF');
+            }
+            ;
+          })
+    ];
+  }
+}
+
+class DrawCircle extends CustomPainter {
+  Paint _paint;
+
+  DrawCircle(Color color) {
+    _paint = Paint()
+      ..color = color
+      ..strokeWidth = 0.0
+      ..style = PaintingStyle.fill;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawCircle(Offset(0.0, 0.0), 10.0, _paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
