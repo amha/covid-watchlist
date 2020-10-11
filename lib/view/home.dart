@@ -5,7 +5,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
-import 'package:covid19_app/view/offline.dart';
 import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +26,8 @@ class Watchlist extends StatefulWidget {
 
 class _WatchlistState extends State<Watchlist> {
   int bottomNavigationIndex = 0;
+  PageController controller =
+      new PageController(initialPage: 0, keepPage: true);
 
   // check for network availability
   ConnectionState _connectionStatus;
@@ -50,6 +51,9 @@ class _WatchlistState extends State<Watchlist> {
 
   @override
   Widget build(BuildContext context) {
+    controller.addListener(() {
+      setState(() {});
+    });
     List<Widget> viewPager = [
       GlobalSnapshot(widget.globalData),
       _buildMobile(context),
@@ -79,10 +83,19 @@ class _WatchlistState extends State<Watchlist> {
               )
             ],
           ),
-          body: _connectionStatus == ConnectionState.none ||
-                  _connectionStatus == null
-              ? Offline()
-              : viewPager.elementAt(bottomNavigationIndex),
+          // body: _connectionStatus == ConnectionState.none ||
+          //         _connectionStatus == null
+          //     ? Offline()
+          //     : viewPager.elementAt(bottomNavigationIndex),
+          body: PageView.builder(
+              itemCount: viewPager.length,
+              controller: controller,
+              onPageChanged: (index) {
+                bottomNavigationIndex = index;
+              },
+              itemBuilder: (context, bottomNavigationIndex) {
+                return viewPager.elementAt(bottomNavigationIndex);
+              }),
           bottomNavigationBar: SizedBox(
             height: 70,
             child: BottomNavigationBar(
@@ -96,7 +109,11 @@ class _WatchlistState extends State<Watchlist> {
                       icon: Icon(Icons.airline_seat_individual_suite_outlined),
                       label: 'Safety Tips'),
                 ],
-                onTap: (i) => {viewPagerController(i)}),
+                onTap: (index) => {
+                      controller.animateToPage(index,
+                          duration: Duration(microseconds: 500),
+                          curve: Curves.ease)
+                    }),
           ),
         );
       },
