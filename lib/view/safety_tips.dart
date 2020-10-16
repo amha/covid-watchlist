@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SafetyTips extends StatelessWidget {
-  List<String> categories = [
+  final List<String> categories = [
     "coffee",
     "nurse",
     "government",

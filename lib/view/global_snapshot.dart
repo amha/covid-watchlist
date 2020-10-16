@@ -242,7 +242,6 @@ class DoughtnutPie extends StatelessWidget {
               default:
                 return charts.Color.fromHex(code: '#4B4FFF');
             }
-            ;
           })
     ];
   }

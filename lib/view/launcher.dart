@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/utils/text_formatter.dart';
 import 'package:flutter/material.dart';
@@ -10,24 +11,43 @@ import 'home.dart';
 class Launcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void fetchData() async {
-      final response = await http.get(
-          'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
+    var client = http.Client();
 
-      Map<String, dynamic> jsonResponse = jsonDecode(response.body)['data'];
-      List<CovidStatistic> rates = [];
+    void getCovidStats() async {
+      List<CovidStatistic> globalValues = [];
+      List<Country> countryValues = [];
 
-      jsonResponse.forEach((k, v) {
-        CovidStatistic dataItem = new CovidStatistic(formatCovidStatName(k), v);
-        rates.add(dataItem);
-      });
-      Future.delayed(const Duration(microseconds: 600), () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Watchlist(rates)));
-      });
+      try {
+        // fetch global data
+        var globalData = await client.get(
+            'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
+        Map<String, dynamic> globalResponse =
+            jsonDecode(globalData.body)['data'];
+
+        globalResponse.forEach((k, v) {
+          CovidStatistic dataItem =
+              new CovidStatistic(formatCovidStatName(k), v);
+          globalValues.add(dataItem);
+        });
+
+        // fetch country data
+        var countryData = await client.get(
+            'https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=100');
+        List<dynamic> countryResponse =
+            jsonDecode(countryData.body)['data']['rows'];
+
+        countryResponse
+            .forEach((item) => {countryValues.add(new Country.fromJson(item))});
+      } finally {
+        client.close();
+        Future.delayed(const Duration(microseconds: 600), () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Watchlist(globalValues, countryValues)));
+        });
+      }
     }
 
-    fetchData();
+    getCovidStats();
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,

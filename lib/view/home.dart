@@ -1,15 +1,10 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:connectivity/connectivity.dart';
+import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'country_detail.dart';
@@ -17,36 +12,31 @@ import 'search.dart';
 
 class Watchlist extends StatefulWidget {
   List<CovidStatistic> globalData = [];
+  List<Country> countryData = [];
 
   @override
   State<StatefulWidget> createState() => _WatchlistState();
 
-  Watchlist(this.globalData);
+  Watchlist(this.globalData, this.countryData);
 }
 
 class _WatchlistState extends State<Watchlist> {
+  Map<String, List> allCountries;
+
   int bottomNavigationIndex = 0;
   PageController controller =
       new PageController(initialPage: 0, keepPage: true);
-
-  // check for network availability
-  ConnectionState _connectionStatus;
-  final Connectivity _networkWrapper = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   void initState() {
     super.initState();
 
-    initConnectivity();
-    _connectivitySubscription =
-        _networkWrapper.onConnectivityChanged.listen(_updateConnectionStatus);
-  }
-
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
+    print(widget.countryData[3].toString());
+    widget.countryData.forEach((element) {
+      print(element.countryAsList().toString());
+      allCountries[element.name] = element.countryAsList();
+    });
+    print("after country");
   }
 
   @override
@@ -72,7 +62,7 @@ class _WatchlistState extends State<Watchlist> {
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
-                    showSearch(context: context, delegate: Delegate());
+                    showSearch(context: context, delegate: Delegate(allCountries));
                   }),
               IconButton(
                 icon: Icon(Icons.remove_circle),
@@ -83,10 +73,6 @@ class _WatchlistState extends State<Watchlist> {
               )
             ],
           ),
-          // body: _connectionStatus == ConnectionState.none ||
-          //         _connectionStatus == null
-          //     ? Offline()
-          //     : viewPager.elementAt(bottomNavigationIndex),
           body: PageView.builder(
               itemCount: viewPager.length,
               controller: controller,
@@ -125,32 +111,6 @@ class _WatchlistState extends State<Watchlist> {
       bottomNavigationIndex = position;
     });
   }
-
-  // Widget _buildWeb(BuildContext context) {
-  //   return Container(
-  //     color: Color(0xFFF0F1F4),
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.max,
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       children: [
-  //         Expanded(
-  //           flex: 1,
-  //           child: Container(
-  //             color: Color(0xFFF0F1F4),
-  //             child: _buildWebList(context),
-  //           ),
-  //         ),
-  //         Expanded(
-  //           flex: 3,
-  //           child: Container(
-  //             color: Colors.white,
-  //             child: _buildEmptyWatchlistScreen(context),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildMobile(BuildContext context) {
     return Consumer<WatchlistModel>(
@@ -232,106 +192,5 @@ class _WatchlistState extends State<Watchlist> {
             )),
       ],
     );
-  }
-
-  // revisit responsive at a later stage
-  // _buildWebList(BuildContext context) {
-  //   //List savedCountries = Provider.of<WatchlistModel>(context).items.toList();
-  //   return Text("We got nothing");
-  // }
-
-  // boilerplate from connectivity plug-in
-  Future<void> initConnectivity() async {
-    ConnectivityResult result;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      result = await _networkWrapper.checkConnectivity();
-    } on PlatformException catch (e) {
-      print(e.toString());
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
-  }
-
-  // boilerplate from connectivity plug-in
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    switch (result) {
-      case ConnectivityResult.wifi:
-        String wifiName, wifiBSSID, wifiIP;
-
-        try {
-          if (!kIsWeb && Platform.isIOS) {
-            LocationAuthorizationStatus status =
-                await _networkWrapper.getLocationServiceAuthorization();
-            if (status == LocationAuthorizationStatus.notDetermined) {
-              status =
-                  await _networkWrapper.requestLocationServiceAuthorization();
-            }
-            if (status == LocationAuthorizationStatus.authorizedAlways ||
-                status == LocationAuthorizationStatus.authorizedWhenInUse) {
-              wifiName = await _networkWrapper.getWifiName();
-            } else {
-              wifiName = await _networkWrapper.getWifiName();
-            }
-          } else {
-            wifiName = await _networkWrapper.getWifiName();
-          }
-        } on PlatformException catch (e) {
-          print(e.toString());
-          wifiName = "Failed to get Wifi Name";
-        }
-
-        try {
-          if (!kIsWeb && Platform.isIOS) {
-            LocationAuthorizationStatus status =
-                await _networkWrapper.getLocationServiceAuthorization();
-            if (status == LocationAuthorizationStatus.notDetermined) {
-              status =
-                  await _networkWrapper.requestLocationServiceAuthorization();
-            }
-            if (status == LocationAuthorizationStatus.authorizedAlways ||
-                status == LocationAuthorizationStatus.authorizedWhenInUse) {
-              wifiBSSID = await _networkWrapper.getWifiBSSID();
-            } else {
-              wifiBSSID = await _networkWrapper.getWifiBSSID();
-            }
-          } else {
-            wifiBSSID = await _networkWrapper.getWifiBSSID();
-          }
-        } on PlatformException catch (e) {
-          print(e.toString());
-          wifiBSSID = "Failed to get Wifi BSSID";
-        }
-
-        try {
-          wifiIP = await _networkWrapper.getWifiIP();
-        } on PlatformException catch (e) {
-          print(e.toString());
-          wifiIP = "Failed to get Wifi IP";
-        }
-
-        setState(() {
-          _connectionStatus = ConnectionState.active;
-          // _connectionStatus = '$result\n'
-          //     'Wifi Name: $wifiName\n'
-          //     'Wifi BSSID: $wifiBSSID\n'
-          //     'Wifi IP: $wifiIP\n';
-        });
-        break;
-      case ConnectivityResult.mobile:
-      case ConnectivityResult.none:
-        setState(() => _connectionStatus = ConnectionState.none);
-        break;
-      default:
-        setState(() => _connectionStatus = ConnectionState.none);
-        break;
-    }
   }
 }

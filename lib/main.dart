@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             accentColor: Color(0xFF202BFF),
             primaryColorDark: Color(0xFF0010ee),
             primaryIconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Color(0xFFF5F5F7),
+            backgroundColor: Color(0xFFFFFFFF),
             visualDensity: VisualDensity.adaptivePlatformDensity,
             // components
             appBarTheme: AppBarTheme(

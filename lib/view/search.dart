@@ -1,11 +1,11 @@
 import 'package:covid19_app/model/country.dart';
-import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'country_detail.dart';
 
 class Delegate extends SearchDelegate<String> {
+  Map<String, List> allCountries;
+
+  Delegate(this.allCountries);
+
   @override
   List<Widget> buildActions(BuildContext context) {
     // displayed after search has been tapped
@@ -40,7 +40,7 @@ class Delegate extends SearchDelegate<String> {
     List<Country> suggestion;
     if (query.isEmpty) {
       suggestion = suggestions.entries
-          .map((e) => Country(e.key, e.value[0], e.value[1]))
+          .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3]))
           .toList();
     } else {
       suggestion = listOfCountries(allCountries)
@@ -49,6 +49,11 @@ class Delegate extends SearchDelegate<String> {
               .toLowerCase()
               .startsWith(query.toLowerCase()))
           .toList();
+      // List<Country> myList = [];
+      // this
+      //     .allCountries
+      //     .forEach((key, value) => {myList.add()});
+      // suggestion = this.allCountries.forEach((key, value) => {});
     }
 
     return ListView.builder(
@@ -59,9 +64,9 @@ class Delegate extends SearchDelegate<String> {
                       'assets/' + suggestion[index].name + ".png",
                       width: 48,
                     )
-                  : Image.asset(
-                      'assets/Default.png',
-                      width: 40,
+                  : Icon(
+                      Icons.local_airport_outlined,
+                      color: Colors.blueGrey,
                     ),
               title: Text(
                 suggestion[index].name,
@@ -69,25 +74,25 @@ class Delegate extends SearchDelegate<String> {
               ),
               subtitle: Text("Estimated Population: " +
                   suggestion[index].population.toString()),
-              onTap: () {
-                List<Country> list = Provider.of<WatchlistModel>(context,
-                        listen: false)
-                    .items
-                    .where((element) => element.name == suggestion[index].name)
-                    .toList();
-
-                // check if the selected country is already in the watchlist
-                if (list.isNotEmpty &&
-                    countryChecker(suggestion[index], list[0])) {
-                  // country exists, retrieve model and pass to detail route
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CountryDetail(list[0])));
-                } else {
-                  // create new country model and pass to detail route
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CountryDetail(suggestion[index])));
-                }
-              },
+              // onTap: () {
+              //   List<Country> list = Provider.of<WatchlistModel>(context,
+              //           listen: false)
+              //       .items
+              //       .where((element) => element.name == suggestion[index].name)
+              //       .toList();
+              //
+              //   // check if the selected country is already in the watchlist
+              //   if (list.isNotEmpty &&
+              //       countryChecker(suggestion[index], list[0])) {
+              //     // country exists, retrieve model and pass to detail route
+              //     Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => CountryDetail(list[0])));
+              //   } else {
+              //     // create new country model and pass to detail route
+              //     Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => CountryDetail(suggestion[index])));
+              //   }
+              // },
             ));
   }
 
