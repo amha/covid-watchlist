@@ -21,7 +21,7 @@ class Watchlist extends StatefulWidget {
 }
 
 class _WatchlistState extends State<Watchlist> {
-  Map<String, List> allCountries;
+  Map<String, List> allCountries = {};
 
   int bottomNavigationIndex = 0;
   PageController controller =
@@ -31,12 +31,12 @@ class _WatchlistState extends State<Watchlist> {
   void initState() {
     super.initState();
 
-    print(widget.countryData[3].toString());
     widget.countryData.forEach((element) {
-      print(element.countryAsList().toString());
-      allCountries[element.name] = element.countryAsList();
+      if (element.name != null) {
+        var list = element.countryAsList();
+        allCountries[element.name.toString()] = list;
+      }
     });
-    print("after country");
   }
 
   @override
@@ -62,7 +62,8 @@ class _WatchlistState extends State<Watchlist> {
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
-                    showSearch(context: context, delegate: Delegate(allCountries));
+                    showSearch(
+                        context: context, delegate: Delegate(allCountries));
                   }),
               IconButton(
                 icon: Icon(Icons.remove_circle),
@@ -176,20 +177,63 @@ class _WatchlistState extends State<Watchlist> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          'assets/empty_watchlist.gif',
-          width: 400,
-          height: 400,
+        Container(
+          height: 100,
+          margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.info_outline,
+            size: 60,
+            color: Colors.white,
+          ),
         ),
         Container(
-            width: MediaQuery.of(context).size.width,
-            height: 100,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             margin: EdgeInsets.all(0),
             alignment: Alignment.center,
             child: Text(
               "Build your watchlist",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white),
             )),
+        Container(
+          alignment: Alignment.center,
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+          child: Text(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Container(
+          child: RaisedButton(
+            // country in watchlist, display remove button
+            padding: const EdgeInsets.all(20),
+            textColor: Colors.white,
+            color: Theme
+                .of(context)
+                .primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            onPressed: () {
+              //toDo
+            },
+            child: Text(
+              "Add to Watchlist",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        )
       ],
     );
   }

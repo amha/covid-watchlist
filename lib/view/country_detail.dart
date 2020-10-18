@@ -22,13 +22,11 @@ class _CountryDetailState extends State<CountryDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor:
-      widget.model.inWatchList ? Colors.black87 : Colors.transparent,
+          widget.model.inWatchList ? Colors.black87 : Colors.transparent,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,

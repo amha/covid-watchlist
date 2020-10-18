@@ -20,29 +20,30 @@ class MyApp extends StatelessWidget {
             textTheme:
                 GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
             // colors
-            brightness: Brightness.light,
-            primaryColor: Color(0xFF202BFF),
-            accentColor: Color(0xFF202BFF),
+            brightness: Brightness.dark,
+            primaryColor: Color(0xFF8B7CFF),
+            accentColor: Color(0xFFFFE87F),
             primaryColorDark: Color(0xFF0010ee),
             primaryIconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Color(0xFFFFFFFF),
+            backgroundColor: Color(0xFF151515),
             visualDensity: VisualDensity.adaptivePlatformDensity,
             // components
             appBarTheme: AppBarTheme(
-                color: Color(0xFFFFFFFF),
+                color: Color(0xFF000000),
                 elevation: 0,
                 textTheme: TextTheme(
                     headline6: TextStyle(
-                        color: Color(0xFF202BFF),
+                        color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w500,
                         fontSize: 18)),
-                iconTheme: IconThemeData(color: Color(0xFF202BFF))),
+                iconTheme: IconThemeData(color: Color(0xFFFFFFFF))),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                selectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
+                selectedLabelStyle: TextStyle(
+                    fontWeight: FontWeight.w800, color: Color(0xFF8B7CFF)),
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
-                selectedItemColor: Theme.of(context).appBarTheme.color,
-                unselectedItemColor: Colors.black,
-                backgroundColor: Colors.white,
+                selectedItemColor: Color(0xFF8B7CFF),
+                unselectedItemColor: Colors.white,
+                backgroundColor: Colors.black,
                 elevation: 0)),
         home: Launcher());
   }
