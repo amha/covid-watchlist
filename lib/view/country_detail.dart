@@ -75,13 +75,13 @@ class _CountryDetailState extends State<CountryDetail> {
                   Container(
                     child: widget.model.hasFlag
                         ? Image.asset(
-                      "assets/" + widget.model.name.toString() + ".png",
-                      width: 48,
-                    )
+                            "assets/" + widget.model.name.toString() + ".png",
+                            width: 48,
+                          )
                         : Image.asset(
-                      'assets/Default.png',
-                      width: 48,
-                    ),
+                            'assets/Default.png',
+                            width: 48,
+                          ),
                     height: 120,
                     padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
                   ),
@@ -132,7 +132,7 @@ class _CountryDetailState extends State<CountryDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "10",
+                          widget.model.totalCases,
                           style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.w200,

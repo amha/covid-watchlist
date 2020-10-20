@@ -63,7 +63,8 @@ class _WatchlistState extends State<Watchlist> {
                   icon: Icon(Icons.search),
                   onPressed: () {
                     showSearch(
-                        context: context, delegate: Delegate(allCountries));
+                        context: context,
+                        delegate: Delegate(widget.countryData));
                   }),
               IconButton(
                 icon: Icon(Icons.remove_circle),
