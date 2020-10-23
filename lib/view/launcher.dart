@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
-import 'package:covid19_app/utils/text_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,22 +18,17 @@ class Launcher extends StatelessWidget {
 
       try {
         // fetch global data
-        var globalData = await client.get(
-            'https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats');
+        var globalData = await client.get('https://api.covid19api.com/summary');
         Map<String, dynamic> globalResponse =
-            jsonDecode(globalData.body)['data'];
+            jsonDecode(globalData.body)['Global'];
 
         globalResponse.forEach((k, v) {
-          CovidStatistic dataItem =
-              new CovidStatistic(formatCovidStatName(k), v);
+          CovidStatistic dataItem = new CovidStatistic(k, v.toString());
           globalValues.add(dataItem);
         });
 
-        // fetch country data
-        var countryData = await client.get(
-            'https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=100');
         List<dynamic> countryResponse =
-            jsonDecode(countryData.body)['data']['rows'];
+            jsonDecode(globalData.body)['Countries'];
 
         countryResponse
             .forEach((item) => {countryValues.add(new Country.fromJson(item))});

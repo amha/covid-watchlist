@@ -125,15 +125,10 @@ class _WatchlistState extends State<Watchlist> {
                       title: Text(watchlist.items[index].name),
                       subtitle:
                           Text(watchlist.items[index].population.toString()),
-                      leading: watchlist.items[index].hasFlag
-                          ? Image.asset(
-                              "assets/" + watchlist.items[index].name + ".png",
-                              width: 48,
-                            )
-                          : Image.asset(
-                              'assets/Default.png',
-                              width: 48,
-                            ),
+                      leading: Icon(
+                        Icons.ac_unit,
+                        color: Colors.white,
+                      ),
                       trailing: Expanded(
                         flex: 1,
                         child: Container(

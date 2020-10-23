@@ -25,11 +25,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/flags/United States.png
-    - assets/flags/Ethiopia.png
-    - assets/flags/Israel.png
-    - assets/flags/Kenya.png
-    - assets/Default.png
     - assets/categories/coffee.png
     - assets/categories/nurse.png
     - assets/categories/government.png

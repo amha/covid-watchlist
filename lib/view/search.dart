@@ -74,14 +74,9 @@ class Delegate extends SearchDelegate<String> {
               textColor: Colors.white,
               tileColor: Colors.black,
               child: ListTile(
-                leading: suggestion[index].hasFlag
-                    ? Image.asset(
-                  'assets/' + suggestion[index].name + ".png",
-                  width: 48,
-                )
-                    : Icon(
+                leading: Icon(
                   Icons.local_airport_outlined,
-                  color: Colors.blueGrey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   suggestion[index].name,
