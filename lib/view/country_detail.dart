@@ -25,207 +25,75 @@ class _CountryDetailState extends State<CountryDetail> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor:
-          widget.model.inWatchList ? Colors.black87 : Colors.transparent,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: widget.model.inWatchList
-            ? IconThemeData(color: Colors.white)
-            : IconThemeData(color: Colors.black87),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              //TODO
-            },
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          iconTheme: Theme.of(context).appBarTheme.iconTheme,
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              bigNumber(widget.model.name, widget.model.newCases, true),
+              bigNumber("Total Cases", widget.model.totalCases, true),
+              bigNumber("Active Cases", widget.model.activeCases, false),
+              bigNumber("Total Recovered", widget.model.newCases, false),
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.feedback),
-            onPressed: () {
-              //TODO
-            },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: widget.model.inWatchList
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .removeCountry(widget.model);
+                  setState(() {
+                    widget.model.inWatchList = false;
+                  });
+                },
+                label: Text("Remove from watchlist"),
+                backgroundColor: Color(0x668B7CFF),
+                foregroundColor: Colors.white,
+              )
+            : FloatingActionButton.extended(
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .addCountry(widget.model);
+                  setState(() {
+                    widget.model.inWatchList = true;
+                  });
+                },
+                label: Text("Add to watchlist"),
+                backgroundColor: Theme.of(context).accentColor,
+              ));
+  }
+
+  Widget bigNumber(String label, String value, bool showBox) {
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width - 40,
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: showBox ? Color(0xFF8B7CFF) : Colors.transparent,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('$label',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900)),
+          Text(
+            '$value',
+            style: TextStyle(
+                color: Colors.white, fontSize: 40, fontWeight: FontWeight.w300),
           )
         ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 90,
-              margin: EdgeInsets.all(16),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.15),
-                      spreadRadius: 6,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.model.name.toUpperCase(),
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w800)),
-                        Text(
-                          "Est. Population: " +
-                              widget.model.population.toString(),
-                          style: TextStyle(color: Colors.black87),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 110,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 90,
-                    width: (size.width / 2) - 22,
-                    margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                    padding: EdgeInsets.fromLTRB(16, 4, 4, 8),
-                    decoration: BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.15),
-                            spreadRadius: 6,
-                            blurRadius: 5,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.model.totalCases,
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w200,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          "Total Deaths",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 90,
-                    width: (size.width / 2) - 22,
-                    margin: EdgeInsets.fromLTRB(4, 0, 8, 8),
-                    padding: EdgeInsets.fromLTRB(16, 4, 4, 8),
-                    decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 6,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "29k",
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w200,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          "Total Infections",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(16),
-              width: size.width - 32,
-              child: widget.model.inWatchList
-                  ? RaisedButton(
-                      // country in watchlist, display remove button
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.red[50],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40.0),
-                      ),
-                      onPressed: () {
-                        Provider.of<WatchlistModel>(context, listen: false)
-                            .removeCountry(widget.model);
-                        setState(() {
-                          widget.model.inWatchList = false;
-                        });
-                      },
-                      child: Text(
-                        "Remove from Watchlist",
-                        style: TextStyle(
-                            color: Colors.red[800],
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  : RaisedButton(
-                      // Country not in watchlist, display add button
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.black87,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      onPressed: () {
-                        //_showDialog();
-                        widget.model.addToWatchlist();
-                        Provider.of<WatchlistModel>(context, listen: false)
-                            .addCountry(widget.model);
-                        setState(() {
-                          widget.model.inWatchList = true;
-                        });
-                      },
-                      child: Text("Add to Watchlist"),
-                    ),
-            ),
-          ],
-        ),
       ),
     );
   }

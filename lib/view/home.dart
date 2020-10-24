@@ -120,52 +120,56 @@ class _WatchlistState extends State<Watchlist> {
             ? _buildEmptyWatchlistScreen(context)
             : ListView.builder(
                 itemCount: watchlist.items.length,
-                itemExtent: 90,
-                itemBuilder: (context, index) => ListTile(
-                      title: Text(watchlist.items[index].name),
-                      subtitle:
-                          Text(watchlist.items[index].population.toString()),
-                      leading: Icon(
-                        Icons.ac_unit,
-                        color: Colors.white,
-                      ),
-                      trailing: Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          width: 80,
-                          height: 100,
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  alignment: Alignment.center,
-                                  height: 25,
-                                  width: 50,
-                                  child: Text(
-                                    "+12%",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                )
-                              ],
-                            ),
+                itemExtent: 80,
+                itemBuilder: (context, index) => ListTileTheme(
+                      contentPadding: EdgeInsets.all(16),
+                      textColor: Colors.white,
+                      child: ListTile(
+                        title: Text(
+                          watchlist.items[index].name,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        trailing: Container(
+                          width: 120,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerRight,
+                                width: 120,
+                                child: Text(
+                                  "NEW CASES",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                width: 120,
+                                child: Text(
+                                  watchlist.items[index].newCases,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              )
+                            ],
                           ),
                         ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  CountryDetail(watchlist.items[index])));
+                        },
                       ),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                CountryDetail(watchlist.items[index])));
-                      },
                     )));
   }
 
@@ -219,7 +223,8 @@ class _WatchlistState extends State<Watchlist> {
               borderRadius: BorderRadius.circular(30.0),
             ),
             onPressed: () {
-              //toDo
+              showSearch(
+                  context: context, delegate: Delegate(widget.countryData));
             },
             child: Text(
               "Add to Watchlist",

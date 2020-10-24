@@ -69,8 +69,7 @@ class Delegate extends SearchDelegate<String> {
 
     return ListView.builder(
         itemCount: suggestion.length,
-        itemBuilder: (context, index) =>
-            ListTileTheme(
+        itemBuilder: (context, index) => ListTileTheme(
               textColor: Colors.white,
               tileColor: Colors.black,
               child: ListTile(
@@ -92,29 +91,21 @@ class Delegate extends SearchDelegate<String> {
                           (element) => element.name == suggestion[index].name)
                       .toList();
 
-                  // check if the selected country is already in the watchlist
-                  if (list.isNotEmpty &&
-                      countryChecker(suggestion[index], list[0])) {
-                    // country exists, retrieve model and pass to detail route
+                  // check if current country has been added to the watchlist
+                  int val = list.indexWhere(
+                          (element) => element.name == suggestion[index].name);
+
+                  if (list.isNotEmpty && val != -1) {
+                    // current country is in watchlist
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CountryDetail(list[index])));
+                        builder: (context) => CountryDetail(list[val])));
                   } else {
-                    // create new country model and pass to detail route
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            CountryDetail(allCountries[index])));
+                            CountryDetail(suggestion[index])));
                   }
                 },
               ),
             ));
-  }
-
-  bool countryChecker(Country c1, Country c2) {
-    print("comparing the following countries: $c1 and $c2");
-    if (c1.name == c2.name) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
