@@ -50,7 +50,8 @@ class Delegate extends SearchDelegate<String> {
     if (query.isEmpty) {
       // show recent searches
       suggestion = suggestions.entries
-          .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3]))
+          .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3],
+              e.value[4], e.value[5], e.value[6], "test", false))
           .toList();
     } else {
       // display entire list of countries
@@ -60,11 +61,6 @@ class Delegate extends SearchDelegate<String> {
               .toLowerCase()
               .startsWith(query.toLowerCase()))
           .toList();
-      // List<Country> myList = [];
-      // this
-      //     .allCountries
-      //     .forEach((key, value) => {myList.add()});
-      // suggestion = this.allCountries.forEach((key, value) => {});
     }
 
     return ListView.builder(
@@ -81,7 +77,8 @@ class Delegate extends SearchDelegate<String> {
                   suggestion[index].name,
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
-                subtitle: Text("Total Cases: " + suggestion[index].totalCases),
+                subtitle:
+                Text("Total Cases: " + suggestion[index].totalConfirmed),
                 onTap: () {
                   List<Country> list = Provider
                       .of<WatchlistModel>(context,

@@ -35,7 +35,7 @@ class Launcher extends StatelessWidget {
       } finally {
         client.close();
         Future.delayed(const Duration(microseconds: 600), () {
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => Watchlist(globalValues, countryValues)));
         });
       }
@@ -44,7 +44,7 @@ class Launcher extends StatelessWidget {
     getCovidStats();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -53,6 +53,11 @@ class Launcher extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              "assets/Play/logo.png",
+              width: 220,
+              height: 220,
+            ),
             Text(
               "Covid19 Tracker",
               style: TextStyle(color: Colors.white, fontSize: 48),

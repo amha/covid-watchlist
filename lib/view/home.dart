@@ -4,11 +4,14 @@ import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
+import 'package:covid19_app/view/tip.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'country_detail.dart';
 import 'search.dart';
+
+enum menu { about, clear }
 
 class Watchlist extends StatefulWidget {
   List<CovidStatistic> globalData = [];
@@ -56,7 +59,7 @@ class _WatchlistState extends State<Watchlist> {
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
             iconTheme: Theme.of(context).appBarTheme.iconTheme,
-            title: Text("Covid 19 Tracker"),
+            title: Text("Covid 19 Watchlist"),
             backgroundColor: Theme.of(context).appBarTheme.color,
             actions: [
               IconButton(
@@ -66,13 +69,29 @@ class _WatchlistState extends State<Watchlist> {
                         context: context,
                         delegate: Delegate(widget.countryData));
                   }),
-              IconButton(
-                icon: Icon(Icons.remove_circle),
-                onPressed: () {
-                  Provider.of<WatchlistModel>(context, listen: false)
-                      .clearWatchlist();
+              PopupMenuButton<String>(
+                color: Colors.white,
+                itemBuilder: (BuildContext context) {
+                  return {'Clear Watchlist', 'About this app'}
+                      .map((String selection) {
+                    return PopupMenuItem(
+                      value: selection,
+                      child: Text(selection),
+                    );
+                  }).toList();
                 },
-              )
+                onSelected: (String value) {
+                  switch (value) {
+                    case 'Clear Watchlist':
+                      Provider.of<WatchlistModel>(context, listen: false)
+                          .clearWatchlist();
+                      break;
+                    case 'About this app':
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) => Tip()));
+                  }
+                },
+              ),
             ],
           ),
           body: PageView.builder(
@@ -154,7 +173,7 @@ class _WatchlistState extends State<Watchlist> {
                                 alignment: Alignment.centerRight,
                                 width: 120,
                                 child: Text(
-                                  watchlist.items[index].newCases,
+                                  watchlist.items[index].newConfirmed,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,

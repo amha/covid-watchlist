@@ -1,45 +1,62 @@
 final Map<String, List> suggestions = {
-  // 'Ethiopia': [100, true],
-  // 'United States': [100, true],
-  // 'Kenya': [100, true],
-  // 'Israel': [100, true],
-  'Ethiopia': ["Ethiopia", "ET", "244", "23"],
-  'USA': ["USA", "USA", "145", "21"]
+  'Ethiopia': ["Ethiopia", "ET", "10", "20", "30", "40", "50", "60"],
+  'USA': ["USA", "USA", "10", "20", "30", "40", "50", "60"]
 };
 
 List<Country> listOfCountries(Map map) {
   return map.entries
-      .map((e) => Country(e.key, e.value[0], e.value[1], "dummy"))
+      .map((e) => Country(e.key, e.value[0], e.value[1], e.value[2], e.value[3],
+          e.value[4], e.value[5], e.value[6], false))
       .toList();
 }
 
 class Country {
   String name;
-  String abbreviation;
-  String totalCases;
-  String newCases;
-  String totalDeaths;
+  String countryCode;
+  String newConfirmed;
+  String totalConfirmed;
   String newDeaths;
+  String totalDeaths;
+  String newRecovered;
   String totalRecovered;
-  String activeCases;
   String critical;
   String casesPerMillion;
 
   int population;
   bool inWatchList;
 
-  Country(String name, String activeCases, String totalCases, String newCases) {
+  Country(String name,
+      String code,
+      String newConfirmed,
+      String totalConfirmed,
+      String newDeaths,
+      String totalDeaths,
+      String newRecovered,
+      String totalRecovered,
+      bool inWatchlist) {
     this.name = name;
-    this.activeCases = activeCases;
-    this.totalCases = totalCases;
-    this.newCases = newCases;
+    this.countryCode = code;
+    this.newConfirmed = newConfirmed;
+    this.totalConfirmed = totalConfirmed;
+    this.newRecovered = newConfirmed;
+    this.totalRecovered = totalRecovered;
+    this.newDeaths = newDeaths;
+    this.totalDeaths = totalDeaths;
     //this.population = 0;
     this.inWatchList = false;
   }
 
   factory Country.fromJson(Map<String, dynamic> json) {
-    return Country(json['Country'], json['TotalRecovered'].toString(),
-        json['TotalConfirmed'].toString(), json['NewConfirmed'].toString());
+    return Country(
+        json['Country'],
+        json['CountryCode'],
+        json['NewConfirmed'].toString(),
+        json['TotalConfirmed'].toString(),
+        json['NewDeaths'].toString(),
+        json['TotalDeaths'].toString(),
+        json['NewRecovered'].toString(),
+        json['TotalConfirmed'].toString(),
+        false);
   }
 
   void addToWatchlist() {
@@ -47,6 +64,11 @@ class Country {
   }
 
   List countryAsList() {
-    return [this.name, this.activeCases, this.totalCases, this.newCases];
+    return [
+      this.name,
+      this.newRecovered,
+      this.totalConfirmed,
+      this.newConfirmed
+    ];
   }
 }
