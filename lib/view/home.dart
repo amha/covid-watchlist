@@ -145,11 +145,12 @@ class _WatchlistState extends State<Watchlist> {
                       textColor: Colors.white,
                       child: ListTile(
                         title: Text(
-                          watchlist.items[index].name,
+                          watchlist.items[index].countryCode.toUpperCase(),
                           style: TextStyle(fontSize: 20),
                         ),
+                        subtitle: Text(watchlist.items[index].name),
                         trailing: Container(
-                          width: 120,
+                          width: 85,
                           padding:
                               EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                           decoration: BoxDecoration(
@@ -160,24 +161,24 @@ class _WatchlistState extends State<Watchlist> {
                             children: [
                               Container(
                                 alignment: Alignment.centerRight,
-                                width: 120,
+                                width: 85,
                                 child: Text(
                                   "NEW CASES",
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 12,
+                                      fontSize: 10,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
                                 alignment: Alignment.centerRight,
-                                width: 120,
+                                width: 85,
                                 child: Text(
                                   watchlist.items[index].newConfirmed,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
-                                      fontWeight: FontWeight.normal),
+                                      fontWeight: FontWeight.w800),
                                 ),
                               )
                             ],

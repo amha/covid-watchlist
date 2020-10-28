@@ -47,21 +47,21 @@ class Delegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<Country> suggestion;
-    if (query.isEmpty) {
-      // show recent searches
-      suggestion = suggestions.entries
-          .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3],
-              e.value[4], e.value[5], e.value[6], "test", false))
-          .toList();
-    } else {
-      // display entire list of countries
-      suggestion = allCountries
-          .where((element) => element.name
-              .toString()
-              .toLowerCase()
-              .startsWith(query.toLowerCase()))
-          .toList();
-    }
+    // if (query.isEmpty) {
+    //   // show recent searches
+    //   suggestion = suggestions.entries
+    //       .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3],
+    //           e.value[4], e.value[5], e.value[6], "test", false))
+    //       .toList();
+    //} else {
+    // display entire list of countries
+    suggestion = allCountries
+        .where((element) => element.name
+            .toString()
+            .toLowerCase()
+            .startsWith(query.toLowerCase()))
+        .toList();
+    // }
 
     return ListView.builder(
         itemCount: suggestion.length,

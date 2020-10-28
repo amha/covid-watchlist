@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             primaryColor: Color(0xFF8B7CFF),
             accentColor: Color(0xFFFFE87F),
-            primaryColorDark: Color(0xFF0010ee),
+            primaryColorDark: Color(0xFF685CC3),
             primaryIconTheme: IconThemeData(color: Colors.white),
             backgroundColor: Color(0xFF151515),
             visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -4,7 +4,7 @@ class Tip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xe9eaf6),
+        backgroundColor: Colors.white, //Color(0xe9eaf6),
         appBar: AppBar(
           title: Text("Tip"),
           centerTitle: false,
