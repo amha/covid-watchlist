@@ -26,10 +26,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/categories/coffee.png
-    - assets/categories/nurse.png
-    - assets/categories/government.png
-    - assets/categories/families.png
-    - assets/categories/warehouse.png
     - assets/Play/logo.png
     - assets/healthy.jpg

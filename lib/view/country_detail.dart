@@ -107,8 +107,8 @@ class _CountryDetailState extends State<CountryDetail> {
                 ),
               ),
               sectionTitle("Latest Numbers"),
-              bigNumber("New Confirmed", widget.model.newConfirmed, false),
-              bigNumber("Newly Recovered", widget.model.newRecovered, false),
+              detailCard("New Confirmed", widget.model.newConfirmed, false),
+              detailCard("Newly Recovered", widget.model.newRecovered, false),
               // bigNumber("New Deaths", widget.model.newDeaths, false),
               // sectionTitle("Aggregate Data"),
               // bigNumber("Total Confirmed", widget.model.totalConfirmed, true),
@@ -129,7 +129,7 @@ class _CountryDetailState extends State<CountryDetail> {
             });
           },
           label: Text("Remove from watchlist"),
-          backgroundColor: Color(0xFF8B7CFF),
+          backgroundColor: Color(0xFFDAC9FF),
           foregroundColor: Colors.white,
         )
             : FloatingActionButton.extended(
@@ -315,35 +315,103 @@ class _CountryDetailState extends State<CountryDetail> {
     );
   }
 
-  Widget bigNumber(String label, String value, bool showBox) {
-    return Container(
-      height: 60,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 40,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: showBox ? Color(0xFF8B7CFF) : Colors.transparent,
+  Widget detailCard(String title, String value, bool showBox) {
+    return Card(
+      margin: EdgeInsets.all(8),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(24))
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('$label',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900)),
-          Text(
-            '$value',
-            style: TextStyle(
-                color: Colors.white, fontSize: 40, fontWeight: FontWeight.w300),
-          )
+          Container(
+              height: 60,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 40,
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Title',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              )),
+          Divider(
+            height: 1,
+            thickness: 1,
+          ),
+          Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total Recovered',
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  Text(
+                    widget.model.totalRecovered,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ],
+              )),
+          Container(
+              height: 50,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 40,
+              padding: EdgeInsets.all(4),
+              child: Text(
+                widget.model.totalConfirmed,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              )),
+          Container(
+              height: 30,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 40,
+              padding: EdgeInsets.all(4),
+              child: Text(
+                widget.model.totalDeaths,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              )),
         ],
       ),
     );
+    // return Container(
+    //   height: 60,
+    //   width: MediaQuery.of(context).size.width - 40,
+    //   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+    //   padding: EdgeInsets.all(8),
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.all(Radius.circular(8)),
+    //     color: showBox ? Color(0xFF8B7CFF) : Colors.transparent,
+    //   ),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     children: [
+    //       Text('$title',
+    //           style: TextStyle(
+    //               color: Colors.white,
+    //               fontSize: 16,
+    //               fontWeight: FontWeight.w900)),
+    //       Text(
+    //         '$value',
+    //         style: TextStyle(
+    //             color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   Widget sectionTitle(String title) {

@@ -7,15 +7,21 @@ import 'package:http/http.dart' as http;
 
 import 'home.dart';
 
-class Launcher extends StatelessWidget {
+class Launcher extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _LauncherState();
+}
+
+class _LauncherState extends State<Launcher> {
+  List<CovidStatistic> globalValues = [];
+  List<Country> countryValues = [];
+  bool showButton = false;
+
   @override
   Widget build(BuildContext context) {
     var client = http.Client();
 
-    void getCovidStats() async {
-      List<CovidStatistic> globalValues = [];
-      List<Country> countryValues = [];
-
+    void getStats() async {
       try {
         // fetch global data
         var globalData = await client.get('https://api.covid19api.com/summary');
@@ -35,13 +41,14 @@ class Launcher extends StatelessWidget {
       } finally {
         client.close();
         Future.delayed(const Duration(microseconds: 600), () {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => Watchlist(globalValues, countryValues)));
+          setState(() {
+            showButton = true;
+          });
         });
       }
     }
 
-    getCovidStats();
+    getStats();
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -66,8 +73,39 @@ class Launcher extends StatelessWidget {
               padding: EdgeInsets.all(24),
               height: 100,
               width: 100,
-              child: CircularProgressIndicator(
-                  strokeWidth: 3, backgroundColor: Colors.white),
+              child: Visibility(
+                visible: showButton ? false : true,
+                child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    backgroundColor: Theme.of(context).primaryColorDark),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(16),
+              height: 80,
+              width: 120,
+              child: Visibility(
+                visible: showButton ? true : false,
+                child: RaisedButton(
+                  child: Text(
+                    'Start',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  textColor: Colors.white,
+                  color: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) =>
+                            Watchlist(globalValues, countryValues)));
+                  },
+                ),
+              ),
             )
           ],
         ),
