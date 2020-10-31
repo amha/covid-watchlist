@@ -47,21 +47,12 @@ class Delegate extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<Country> suggestion;
-    // if (query.isEmpty) {
-    //   // show recent searches
-    //   suggestion = suggestions.entries
-    //       .map((e) => Country(e.value[0], e.value[1], e.value[2], e.value[3],
-    //           e.value[4], e.value[5], e.value[6], "test", false))
-    //       .toList();
-    //} else {
-    // display entire list of countries
     suggestion = allCountries
         .where((element) => element.name
             .toString()
             .toLowerCase()
             .startsWith(query.toLowerCase()))
         .toList();
-    // }
 
     return ListView.builder(
         itemCount: suggestion.length,
@@ -78,11 +69,10 @@ class Delegate extends SearchDelegate<String> {
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
                 subtitle:
-                Text("Total Cases: " + suggestion[index].totalConfirmed),
+                    Text("Total Cases: " + suggestion[index].totalConfirmed),
                 onTap: () {
-                  List<Country> list = Provider
-                      .of<WatchlistModel>(context,
-                      listen: false)
+                  List<Country> list = Provider.of<WatchlistModel>(context,
+                          listen: false)
                       .items
                       .where(
                           (element) => element.name == suggestion[index].name)
@@ -90,7 +80,7 @@ class Delegate extends SearchDelegate<String> {
 
                   // check if current country has been added to the watchlist
                   int val = list.indexWhere(
-                          (element) => element.name == suggestion[index].name);
+                      (element) => element.name == suggestion[index].name);
 
                   if (list.isNotEmpty && val != -1) {
                     // current country is in watchlist

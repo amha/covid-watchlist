@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 
 class CountryDetail extends StatefulWidget {
@@ -19,32 +21,31 @@ class CountryDetail extends StatefulWidget {
 class _CountryDetailState extends State<CountryDetail> {
   //bool isInWatchlist = false;
   int touchedIndex;
-  List<int> stats = [];
+  List<dynamic> stats = [];
+  double max = 0;
+  var dataPublishedOn;
 
   void getCountryStats() async {
     var client = http.Client();
+    String countryName = widget.model.name;
 
     try {
       // fetch global data
       var globalData = await client.get(
-          'https://api.covid19api.com/country/Argentina?from=2020-10-19T00:00:00Z&to=2020-10-25T00:00:00Z');
-      List<dynamic> globalResponse = jsonDecode(globalData.body);
+          "https://api.covid19api.com/country/'$countryName'?from=2020-10-19T00:00:00Z&to=2020-10-27T00:00:00Z");
+      stats = jsonDecode(globalData.body);
 
-      for (var item in globalResponse) {
-        stats.add(item['Active']);
-      }
-
-      // List<dynamic> countryResponse =
-      // jsonDecode(globalData.body)['Countries'];
+      // globalResponse.forEach((element) {
+      //   Map map = element;
+      //   stats.add(map["Active"].toDouble());
       //
-      // countryResponse
-      //     .forEach((item) => {countryValues.add(new Country.fromJson(item))});
+      //   if (map["Active"] > max) {
+      //     max = map["Active"].toDouble();
+      //   }
+      // });
     } finally {
       client.close();
-      Future.delayed(const Duration(microseconds: 600), () {
-        // Navigator.of(context).pushReplacement(MaterialPageRoute(
-        //     builder: (context) => Watchlist(globalValues, countryValues)));
-      });
+      Future.delayed(const Duration(microseconds: 600), () {});
     }
   }
 
@@ -52,6 +53,8 @@ class _CountryDetailState extends State<CountryDetail> {
   void initState() {
     super.initState();
     getCountryStats();
+
+    dataPublishedOn = Jiffy()..subtract(days: 1);
   }
 
   @override
@@ -73,14 +76,29 @@ class _CountryDetailState extends State<CountryDetail> {
           ),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                child: Text(
+                  "As of " + dataPublishedOn.yMMMMd.toString(),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -100,20 +118,32 @@ class _CountryDetailState extends State<CountryDetail> {
                             color: Color(0xFF8B7CFF),
                           ),
                           height: 240,
-                          width: MediaQuery.of(context).size.width - 40,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width - 40,
                           child: BarChart(mainBarData())),
                     ],
                   ),
                 ),
               ),
               sectionTitle("Latest Numbers"),
-              detailCard("New Confirmed", widget.model.newConfirmed, false),
-              detailCard("Newly Recovered", widget.model.newRecovered, false),
-              // bigNumber("New Deaths", widget.model.newDeaths, false),
-              // sectionTitle("Aggregate Data"),
-              // bigNumber("Total Confirmed", widget.model.totalConfirmed, true),
-              // bigNumber("Total Recovered", widget.model.totalRecovered, false),
-              // bigNumber("Total Deaths", widget.model.totalDeaths, false)
+              detailCard(
+                  "Reported Yesterday", widget.model.newConfirmed, false),
+              detailCard("Total Numbers", widget.model.newConfirmed, false),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                child: Text(
+                  "This app is not responsible or liable for the content displayed herein. The producer of this app does not control the content, verify the content, and is in no way responsible for the content.",
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              )
             ],
           ),
         ),
@@ -130,7 +160,7 @@ class _CountryDetailState extends State<CountryDetail> {
           },
           label: Text("Remove from watchlist"),
           backgroundColor: Color(0xFFDAC9FF),
-          foregroundColor: Colors.white,
+          foregroundColor: Colors.black,
         )
             : FloatingActionButton.extended(
           onPressed: () {
@@ -159,7 +189,14 @@ class _CountryDetailState extends State<CountryDetail> {
               : Text(widget.model.name + 'removed from watchlist'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[],
+              children: <Widget>[
+                Text(
+                  isConfirmation
+                      ? 'You can easily access the latest statistics from the Watchlist screen.'
+                      : 'Alright. Your watchlist has been updated to reflect the removal of this country.',
+                  style: TextStyle(color: Colors.black),
+                )
+              ],
             ),
           ),
           backgroundColor: Colors.white,
@@ -196,7 +233,7 @@ class _CountryDetailState extends State<CountryDetail> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: max,
             colors: [Theme
                 .of(context)
                 .primaryColorDark
@@ -212,19 +249,19 @@ class _CountryDetailState extends State<CountryDetail> {
       List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, 23, isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, 34, isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, 56, isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, 66, isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(4, 34, isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, 56, isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, 5, isTouched: i == touchedIndex);
           default:
             return null;
         }
@@ -319,8 +356,7 @@ class _CountryDetailState extends State<CountryDetail> {
     return Card(
       margin: EdgeInsets.all(8),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -332,7 +368,7 @@ class _CountryDetailState extends State<CountryDetail> {
                   .width - 40,
               padding: EdgeInsets.all(16),
               child: Text(
-                'Title',
+                title,
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -353,7 +389,7 @@ class _CountryDetailState extends State<CountryDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Recovered',
+                    'Recovered',
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   Text(
@@ -364,54 +400,47 @@ class _CountryDetailState extends State<CountryDetail> {
               )),
           Container(
               height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 16),
               width: MediaQuery
                   .of(context)
                   .size
                   .width - 40,
-              padding: EdgeInsets.all(4),
-              child: Text(
-                widget.model.totalConfirmed,
-                style: TextStyle(fontSize: 16, color: Colors.white),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Confirmed',
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  Text(
+                    widget.model.totalConfirmed,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ],
               )),
           Container(
-              height: 30,
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 16),
               width: MediaQuery
                   .of(context)
                   .size
                   .width - 40,
-              padding: EdgeInsets.all(4),
-              child: Text(
-                widget.model.totalDeaths,
-                style: TextStyle(fontSize: 16, color: Colors.white),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Dead',
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  Text(
+                    widget.model.totalDeaths,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                ],
               )),
         ],
       ),
     );
-    // return Container(
-    //   height: 60,
-    //   width: MediaQuery.of(context).size.width - 40,
-    //   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-    //   padding: EdgeInsets.all(8),
-    //   decoration: BoxDecoration(
-    //     borderRadius: BorderRadius.all(Radius.circular(8)),
-    //     color: showBox ? Color(0xFF8B7CFF) : Colors.transparent,
-    //   ),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       Text('$title',
-    //           style: TextStyle(
-    //               color: Colors.white,
-    //               fontSize: 16,
-    //               fontWeight: FontWeight.w900)),
-    //       Text(
-    //         '$value',
-    //         style: TextStyle(
-    //             color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   Widget sectionTitle(String title) {
