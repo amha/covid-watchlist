@@ -21,11 +21,11 @@ class CountryDetail extends StatefulWidget {
 class _CountryDetailState extends State<CountryDetail> {
   //bool isInWatchlist = false;
   int touchedIndex;
-  List<dynamic> stats = [];
+  List<dynamic> stats;
   double max = 0;
   var dataPublishedOn;
 
-  void getCountryStats() async {
+  Future<List> getCountryStats() async {
     var client = http.Client();
     String countryName = widget.model.name;
 
@@ -34,26 +34,16 @@ class _CountryDetailState extends State<CountryDetail> {
       var globalData = await client.get(
           "https://api.covid19api.com/country/'$countryName'?from=2020-10-19T00:00:00Z&to=2020-10-27T00:00:00Z");
       stats = jsonDecode(globalData.body);
-
-      // globalResponse.forEach((element) {
-      //   Map map = element;
-      //   stats.add(map["Active"].toDouble());
-      //
-      //   if (map["Active"] > max) {
-      //     max = map["Active"].toDouble();
-      //   }
-      // });
     } finally {
       client.close();
       Future.delayed(const Duration(microseconds: 600), () {});
     }
+    return stats;
   }
 
   @override
   void initState() {
     super.initState();
-    getCountryStats();
-
     dataPublishedOn = Jiffy()..subtract(days: 1);
   }
 
@@ -75,107 +65,113 @@ class _CountryDetailState extends State<CountryDetail> {
                 Navigator.popUntil(context, (route) => route.isFirst),
           ),
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
-                child: Text(
-                  "As of " + dataPublishedOn.yMMMMd.toString(),
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                color: Theme
-                    .of(context)
-                    .primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Active Infections this week",
+        body: FutureBuilder(
+          future: getCountryStats(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                      child: Text(
+                        "As of " + dataPublishedOn.yMMMMd.toString(),
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
-                      Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            color: Color(0xFF8B7CFF),
-                          ),
-                          height: 240,
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width - 40,
-                          child: BarChart(mainBarData())),
-                    ],
-                  ),
+                    ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      color: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Active Infections this week",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                            Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  color: Color(0xFF8B7CFF),
+                                ),
+                                height: 240,
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: BarChart(mainBarData())),
+                          ],
+                        ),
+                      ),
+                    ),
+                    sectionTitle("Latest Numbers"),
+                    detailCard(
+                        "Reported Yesterday", widget.model.newConfirmed, false),
+                    detailCard(
+                        "Total Numbers", widget.model.newConfirmed, false),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      child: Text(
+                        "This app is not responsible or liable for the content displayed herein. The producer of this app does not control the content, verify the content, and is in no way responsible for the content.",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    )
+                  ],
                 ),
-              ),
-              sectionTitle("Latest Numbers"),
-              detailCard(
-                  "Reported Yesterday", widget.model.newConfirmed, false),
-              detailCard("Total Numbers", widget.model.newConfirmed, false),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                child: Text(
-                  "This app is not responsible or liable for the content displayed herein. The producer of this app does not control the content, verify the content, and is in no way responsible for the content.",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              )
-            ],
-          ),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: widget.model.inWatchList
             ? FloatingActionButton.extended(
-          onPressed: () {
-            Provider.of<WatchlistModel>(context, listen: false)
-                .removeCountry(widget.model);
-            _showMyDialog(false);
-            setState(() {
-              widget.model.inWatchList = false;
-            });
-          },
-          label: Text("Remove from watchlist"),
-          backgroundColor: Color(0xFFDAC9FF),
-          foregroundColor: Colors.black,
-        )
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .removeCountry(widget.model);
+                  _showMyDialog(false);
+                  setState(() {
+                    widget.model.inWatchList = false;
+                  });
+                },
+                label: Text("Remove from watchlist"),
+                backgroundColor: Color(0xFFDAC9FF),
+                foregroundColor: Colors.black,
+              )
             : FloatingActionButton.extended(
-          onPressed: () {
-            Provider.of<WatchlistModel>(context, listen: false)
-                .addCountry(widget.model);
-            _showMyDialog(true);
-            setState(() {
-              widget.model.inWatchList = true;
-            });
-          },
-          label: Text("Add to watchlist"),
-          backgroundColor: Theme
-              .of(context)
-              .accentColor,
-        ));
+                onPressed: () {
+                  Provider.of<WatchlistModel>(context, listen: false)
+                      .addCountry(widget.model);
+                  _showMyDialog(true);
+                  setState(() {
+                    widget.model.inWatchList = true;
+                  });
+                },
+                label: Text("Add to watchlist"),
+                backgroundColor: Theme.of(context).accentColor,
+              ));
   }
 
   Future<void> _showMyDialog(bool isConfirmation) async {
@@ -233,7 +229,7 @@ class _CountryDetailState extends State<CountryDetail> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: max,
+            y: stats[0]['Confirmed'].toDouble() + 400,
             colors: [Theme
                 .of(context)
                 .primaryColorDark
@@ -249,15 +245,20 @@ class _CountryDetailState extends State<CountryDetail> {
       List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 23, isTouched: i == touchedIndex);
+            return makeGroupData(0, stats[0]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 34, isTouched: i == touchedIndex);
+            return makeGroupData(1, stats[1]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 56, isTouched: i == touchedIndex);
+            return makeGroupData(2, stats[2]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 66, isTouched: i == touchedIndex);
+            return makeGroupData(3, stats[3]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 34, isTouched: i == touchedIndex);
+            return makeGroupData(4, stats[4]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 5:
             return makeGroupData(5, 56, isTouched: i == touchedIndex);
           case 6:
@@ -353,6 +354,10 @@ class _CountryDetailState extends State<CountryDetail> {
   }
 
   Widget detailCard(String title, String value, bool showBox) {
+    bool isTotalCard = false;
+    if (title != 'Reported Yesterday') {
+      isTotalCard = true;
+    }
     return Card(
       margin: EdgeInsets.all(8),
       shape: RoundedRectangleBorder(
@@ -393,7 +398,9 @@ class _CountryDetailState extends State<CountryDetail> {
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   Text(
-                    widget.model.totalRecovered,
+                    isTotalCard
+                        ? widget.model.totalRecovered
+                        : widget.model.newRecovered,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],
@@ -413,7 +420,9 @@ class _CountryDetailState extends State<CountryDetail> {
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   Text(
-                    widget.model.totalConfirmed,
+                    isTotalCard
+                        ? widget.model.totalConfirmed
+                        : widget.model.newConfirmed,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],
@@ -433,7 +442,9 @@ class _CountryDetailState extends State<CountryDetail> {
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   Text(
-                    widget.model.totalDeaths,
+                    isTotalCard
+                        ? widget.model.totalDeaths
+                        : widget.model.newDeaths,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],

@@ -41,9 +41,8 @@ class _LauncherState extends State<Launcher> {
       } finally {
         client.close();
         Future.delayed(const Duration(microseconds: 600), () {
-          setState(() {
-            showButton = true;
-          });
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => Watchlist(globalValues, countryValues)));
         });
       }
     }
@@ -65,48 +64,36 @@ class _LauncherState extends State<Launcher> {
               width: 220,
               height: 220,
             ),
+            SizedBox(
+              height: 10,
+              width: 50,
+              child: Container(
+                color: Theme.of(context).primaryColorDark,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 16),
+              child: Text(
+                "Covid Watchlist",
+                style: TextStyle(color: Colors.white, fontSize: 36),
+              ),
+            ),
             Text(
-              "Covid19 Tracker",
-              style: TextStyle(color: Colors.white, fontSize: 48),
+              "Stay informed. Stay health.",
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             Container(
               padding: EdgeInsets.all(24),
+              margin: EdgeInsets.symmetric(vertical: 24),
               height: 100,
               width: 100,
               child: Visibility(
-                visible: showButton ? false : true,
+                visible: true,
                 child: CircularProgressIndicator(
                     strokeWidth: 3,
-                    backgroundColor: Theme.of(context).primaryColorDark),
+                    backgroundColor: Theme.of(context).primaryColor),
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(16),
-              height: 80,
-              width: 120,
-              child: Visibility(
-                visible: showButton ? true : false,
-                child: RaisedButton(
-                  child: Text(
-                    'Start',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  textColor: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            Watchlist(globalValues, countryValues)));
-                  },
-                ),
-              ),
-            )
           ],
         ),
       ),
