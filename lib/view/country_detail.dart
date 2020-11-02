@@ -29,10 +29,17 @@ class _CountryDetailState extends State<CountryDetail> {
     var client = http.Client();
     String countryName = widget.model.name;
 
+    var start = Jiffy()
+      ..subtract(days: 8)
+      ..utc();
+    var end = Jiffy()
+      ..subtract(days: 1)
+      ..utc();
+
     try {
       // fetch global data
       var globalData = await client.get(
-          "https://api.covid19api.com/country/'$countryName'?from=2020-10-19T00:00:00Z&to=2020-10-27T00:00:00Z");
+          "https://api.covid19api.com/country/$countryName?from=${start.format()}&to=${end.format().toString()}");
       stats = jsonDecode(globalData.body);
     } finally {
       client.close();
@@ -154,6 +161,7 @@ class _CountryDetailState extends State<CountryDetail> {
                   _showMyDialog(false);
                   setState(() {
                     widget.model.inWatchList = false;
+                    stats = stats;
                   });
                 },
                 label: Text("Remove from watchlist"),
@@ -167,6 +175,7 @@ class _CountryDetailState extends State<CountryDetail> {
                   _showMyDialog(true);
                   setState(() {
                     widget.model.inWatchList = true;
+                    stats = stats;
                   });
                 },
                 label: Text("Add to watchlist"),
@@ -229,7 +238,7 @@ class _CountryDetailState extends State<CountryDetail> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: stats[0]['Confirmed'].toDouble() + 400,
+            y: stats[0]['Confirmed'].toDouble() * 1.3,
             colors: [Theme
                 .of(context)
                 .primaryColorDark
@@ -260,9 +269,11 @@ class _CountryDetailState extends State<CountryDetail> {
             return makeGroupData(4, stats[4]['Confirmed'].toDouble(),
                 isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 56, isTouched: i == touchedIndex);
+            return makeGroupData(5, stats[5]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 5, isTouched: i == touchedIndex);
+            return makeGroupData(6, stats[6]['Confirmed'].toDouble(),
+                isTouched: i == touchedIndex);
           default:
             return null;
         }
@@ -277,41 +288,31 @@ class _CountryDetailState extends State<CountryDetail> {
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = 'Monday, October 26';
+                  weekDay = 'Monday\r' + stats[0]['Date'];
                   break;
                 case 1:
-                  weekDay = 'Tuesday, October 27';
+                  weekDay = 'Tuesday\r' + stats[1]['Date'];
                   break;
                 case 2:
-                  weekDay = 'Wednesday, October 28';
+                  weekDay = 'Wednesday\r' + stats[2]['Date'];
                   break;
                 case 3:
-                  weekDay = 'Thursday';
+                  weekDay = 'Thursday\r' + stats[3]['Date'];
                   break;
                 case 4:
-                  weekDay = 'Friday';
+                  weekDay = 'Friday\r' + stats[4]['Date'];
                   break;
                 case 5:
-                  weekDay = 'Saturday';
+                  weekDay = 'Saturday\r' + stats[5]['Date'];
                   break;
                 case 6:
-                  weekDay = 'Sunday';
+                  weekDay = 'Sunday\r' + stats[6]['Date'];
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
                   TextStyle(color: Colors.yellow));
             }),
-        touchCallback: (barTouchResponse) {
-          setState(() {
-            if (barTouchResponse.spot != null &&
-                barTouchResponse.touchInput is! FlPanEnd &&
-                barTouchResponse.touchInput is! FlLongPressEnd) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
-            }
-          });
-        },
+        touchCallback: (barTouchResponse) {},
       ),
       titlesData: FlTitlesData(
         show: true,

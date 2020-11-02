@@ -1,10 +1,10 @@
 import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
+import 'package:covid19_app/view/about.dart';
 import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
-import 'package:covid19_app/view/tip.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -87,8 +87,8 @@ class _WatchlistState extends State<Watchlist> {
                           .clearWatchlist();
                       break;
                     case 'About this app':
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) => Tip()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => About()));
                   }
                 },
               ),
@@ -148,13 +148,22 @@ class _WatchlistState extends State<Watchlist> {
                           watchlist.items[index].countryCode.toUpperCase(),
                           style: TextStyle(fontSize: 20),
                         ),
+                        leading: CircleAvatar(
+                            backgroundColor: Color(0xFFDAC9FF),
+                            child: Text(
+                              getLeading(watchlist.items[index].totalDeaths),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            )),
                         subtitle: Text(watchlist.items[index].name),
                         trailing: Container(
                           width: 85,
                           padding:
                               EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
+                              color: Color(0xFFDAC9FF),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8))),
                           child: Column(
@@ -165,7 +174,7 @@ class _WatchlistState extends State<Watchlist> {
                                 child: Text(
                                   "NEW CASES",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -176,7 +185,7 @@ class _WatchlistState extends State<Watchlist> {
                                 child: Text(
                                   watchlist.items[index].newConfirmed,
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -226,7 +235,7 @@ class _WatchlistState extends State<Watchlist> {
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
           child: Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
+            "Keep track of the pandemic by building a watchlist. A watchlist monitors the spread of the 19 virus at a country level. ",
             style: TextStyle(color: Colors.white, fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -257,5 +266,30 @@ class _WatchlistState extends State<Watchlist> {
         )
       ],
     );
+  }
+
+  String getLeading(String value) {
+    String preview = "";
+    int numberOfCharacters = value.characters.length;
+    switch (numberOfCharacters) {
+      case 1:
+      case 2:
+      case 3:
+        preview = "100s";
+        break;
+      case 4:
+        preview = value.substring(0, 1) + "K";
+        break;
+      case 5:
+        preview = value.substring(0, 2) + "K";
+        break;
+      case 6:
+        preview = value.substring(0, 3) + "K";
+        break;
+      default:
+        preview = value.substring(0, 1) + "M";
+        break;
+    }
+    return preview;
   }
 }
