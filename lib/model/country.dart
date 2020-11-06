@@ -25,7 +25,8 @@ class Country {
   int population;
   bool inWatchList;
 
-  Country(String name,
+  Country(
+      String name,
       String code,
       String newConfirmed,
       String totalConfirmed,

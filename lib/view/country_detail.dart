@@ -3,8 +3,10 @@ import 'dart:core';
 
 import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
+import 'package:covid19_app/utils/components.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -60,11 +62,10 @@ class _CountryDetailState extends State<CountryDetail> {
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.transparent,
           iconTheme: Theme.of(context).appBarTheme.iconTheme,
           title: Text(
             widget.model.name,
-            style: Theme.of(context).appBarTheme.textTheme.headline6,
+            style: GoogleFonts.quicksand(),
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -81,18 +82,17 @@ class _CountryDetailState extends State<CountryDetail> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    sectionTitle("Confirmed cases"),
                     Container(
                       alignment: Alignment.center,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: Text(
                         "As of " + dataPublishedOn.yMMMMd.toString(),
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -105,11 +105,11 @@ class _CountryDetailState extends State<CountryDetail> {
                         child: Column(
                           children: [
                             Text(
-                              "Active Infections this week",
+                              "Confirmed Infections (last 7 days)",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w800),
+                                  fontWeight: FontWeight.bold),
                             ),
                             Container(
                                 padding: EdgeInsets.symmetric(
@@ -169,7 +169,7 @@ class _CountryDetailState extends State<CountryDetail> {
                 foregroundColor: Colors.black,
               )
             : FloatingActionButton.extended(
-                onPressed: () {
+          onPressed: () {
                   Provider.of<WatchlistModel>(context, listen: false)
                       .addCountry(widget.model);
                   _showMyDialog(true);
@@ -178,7 +178,10 @@ class _CountryDetailState extends State<CountryDetail> {
                     stats = stats;
                   });
                 },
-                label: Text("Add to watchlist"),
+                label: Text(
+                  "Add to Watchlist",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
                 backgroundColor: Theme.of(context).accentColor,
               ));
   }
@@ -238,7 +241,7 @@ class _CountryDetailState extends State<CountryDetail> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: stats[0]['Confirmed'].toDouble() * 1.3,
+            y: stats[0]['Confirmed'].toDouble() * 1.4,
             colors: [Theme
                 .of(context)
                 .primaryColorDark
@@ -283,34 +286,34 @@ class _CountryDetailState extends State<CountryDetail> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.blueGrey,
+            tooltipBgColor: Colors.black,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = 'Monday\r' + stats[0]['Date'];
+                  weekDay = Jiffy(stats[0]['Date']).MMMMEEEEd;
                   break;
                 case 1:
-                  weekDay = 'Tuesday\r' + stats[1]['Date'];
+                  weekDay = Jiffy(stats[1]['Date']).MMMMEEEEd;
                   break;
                 case 2:
-                  weekDay = 'Wednesday\r' + stats[2]['Date'];
+                  weekDay = Jiffy(stats[2]['Date']).MMMMEEEEd;
                   break;
                 case 3:
-                  weekDay = 'Thursday\r' + stats[3]['Date'];
+                  weekDay = Jiffy(stats[3]['Date']).MMMMEEEEd;
                   break;
                 case 4:
-                  weekDay = 'Friday\r' + stats[4]['Date'];
+                  weekDay = Jiffy(stats[4]['Date']).MMMMEEEEd;
                   break;
                 case 5:
-                  weekDay = 'Saturday\r' + stats[5]['Date'];
+                  weekDay = Jiffy(stats[5]['Date']).MMMMEEEEd;
                   break;
                 case 6:
-                  weekDay = 'Sunday\r' + stats[6]['Date'];
+                  weekDay = Jiffy(stats[6]['Date']).MMMMEEEEd;
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
-                  TextStyle(color: Colors.yellow));
+                  TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold));
             }),
         touchCallback: (barTouchResponse) {},
       ),
@@ -325,19 +328,19 @@ class _CountryDetailState extends State<CountryDetail> {
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'M';
+                return Jiffy(stats[0]['Date']).dateTime.day.toString();
               case 1:
-                return 'T';
+                return Jiffy(stats[1]['Date']).dateTime.day.toString();
               case 2:
-                return 'W';
+                return Jiffy(stats[2]['Date']).dateTime.day.toString();
               case 3:
-                return 'T';
+                return Jiffy(stats[3]['Date']).dateTime.day.toString();
               case 4:
-                return 'F';
+                return Jiffy(stats[4]['Date']).dateTime.day.toString();
               case 5:
-                return 'S';
+                return Jiffy(stats[5]['Date']).dateTime.day.toString();
               case 6:
-                return 'S';
+                return Jiffy(stats[6]['Date']).dateTime.day.toString();
               default:
                 return '';
             }
@@ -374,9 +377,9 @@ class _CountryDetailState extends State<CountryDetail> {
                   .width - 40,
               padding: EdgeInsets.all(16),
               child: Text(
-                title,
+                isTotalCard ? 'Country Snapshot' : 'Reported Yesterday',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               )),
@@ -451,19 +454,6 @@ class _CountryDetailState extends State<CountryDetail> {
                 ],
               )),
         ],
-      ),
-    );
-  }
-
-  Widget sectionTitle(String title) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Text(
-        "$title",
-        style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-            color: Color(0xFF8B7CFF)),
       ),
     );
   }

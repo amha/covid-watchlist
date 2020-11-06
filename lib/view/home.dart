@@ -6,6 +6,7 @@ import 'package:covid19_app/view/global_snapshot.dart';
 import 'package:covid19_app/view/safety_tips.dart';
 import 'package:covid19_app/view/search.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'country_detail.dart';
@@ -59,7 +60,10 @@ class _WatchlistState extends State<Watchlist> {
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
             iconTheme: Theme.of(context).appBarTheme.iconTheme,
-            title: Text("Covid 19 Watchlist"),
+            title: Text(
+              "Covid 19 Watchlist",
+              style: GoogleFonts.quicksand(),
+            ),
             backgroundColor: Theme.of(context).appBarTheme.color,
             actions: [
               IconButton(
@@ -145,27 +149,28 @@ class _WatchlistState extends State<Watchlist> {
                       textColor: Colors.white,
                       child: ListTile(
                         title: Text(
-                          watchlist.items[index].countryCode.toUpperCase(),
+                          watchlist.items[index].name,
                           style: TextStyle(fontSize: 20),
                         ),
                         leading: CircleAvatar(
-                            backgroundColor: Color(0xFFDAC9FF),
+                            backgroundColor: Color(0xFF332c47),
                             child: Text(
-                              getLeading(watchlist.items[index].totalDeaths),
+                              watchlist.items[index].countryCode.toUpperCase(),
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold),
                             )),
-                        subtitle: Text(watchlist.items[index].name),
+                        subtitle: Text("Total Deaths: " +
+                            watchlist.items[index].totalDeaths),
                         trailing: Container(
                           width: 85,
                           padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                           decoration: BoxDecoration(
                               color: Color(0xFFDAC9FF),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
+                              BorderRadius.all(Radius.circular(8))),
                           child: Column(
                             children: [
                               Container(
@@ -241,13 +246,14 @@ class _WatchlistState extends State<Watchlist> {
           ),
         ),
         Container(
+          height: 60,
           child: RaisedButton(
             // country in watchlist, display remove button
             padding: const EdgeInsets.all(20),
             textColor: Colors.white,
             color: Theme
                 .of(context)
-                .primaryColor,
+                .accentColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
@@ -258,7 +264,7 @@ class _WatchlistState extends State<Watchlist> {
             child: Text(
               "Add to Watchlist",
               style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),

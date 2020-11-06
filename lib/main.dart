@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'C19 Tracker',
+        title: 'Covid Watchlist',
         theme: ThemeData(
             // text
             textTheme:
@@ -31,11 +31,6 @@ class MyApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
                 color: Color(0xFF000000),
                 elevation: 0,
-                textTheme: TextTheme(
-                    headline6: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18)),
                 iconTheme: IconThemeData(color: Color(0xFFFFFFFF))),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
                 selectedLabelStyle: TextStyle(
