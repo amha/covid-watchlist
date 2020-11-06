@@ -1,16 +1,9 @@
 # covid19_app
 
-Covid 19 infections tracker.
+Covid 19 Watchlist
 
-## Getting Started
+## About
 
-This project is a starting point for a Flutter application.
+News coverage of the pandemic is nearly identical to news coverage of the stock market. A measurement, for instance, is identified and presented within a dramatic frame that behaviorally informs or entertains or both. I decided to remove journalistic forms in the app’s presentation.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In doing so, the experience abandons narrative; the emphasis here is purely quantitative. The presentation should be familiar to anyone who monitors the stock market. Aside from a few deliberate ‘specials’ or lists of ‘notable people’, we don’t have a good way of engaging with the human, qualitative aspect, of the pandemic.

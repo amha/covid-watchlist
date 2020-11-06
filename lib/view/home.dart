@@ -166,11 +166,11 @@ class _WatchlistState extends State<Watchlist> {
                         trailing: Container(
                           width: 85,
                           padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                           decoration: BoxDecoration(
                               color: Color(0xFFDAC9FF),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8))),
+                                  BorderRadius.all(Radius.circular(8))),
                           child: Column(
                             children: [
                               Container(
