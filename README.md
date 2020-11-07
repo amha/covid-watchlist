@@ -8,6 +8,14 @@ News coverage of the pandemic is nearly identical to news coverage of the stock 
 
 In doing so, the experience abandons narrative; the emphasis here is purely quantitative. The presentation should be familiar to anyone who monitors the stock market. Aside from a few deliberate ‘specials’ or lists of ‘notable people’, we don’t have a good way of engaging with the human, qualitative aspect, of the pandemic.
 
+<div display="flex" style="padding:30px;">
+  <img src="/hype/1a.global.png" width="250"/>
+  &nbsp;
+  <img src="/hype/2a.watchlist.png" width="250"/>
+  &nbsp;
+  <img src="/hype/3a.country.detail.png" width="250"/>
+</div>
+
 ## Attribution
 
 <a href="https://www.freepik.com/vectors/medical">Medical vector created by pch.vector - www.freepik.com</a>
@@ -15,7 +23,7 @@ In doing so, the experience abandons narrative; the emphasis here is purely quan
 ## License
 
 MIT License
-
+'''
 Copyright (c) 2020 Amha Mogus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,4 +42,4 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE.'''
