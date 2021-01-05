@@ -1,4 +1,4 @@
-# covid19_app
+# Covid19 Watchlist
 
 Covid 19 Watchlist
 
