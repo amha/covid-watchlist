@@ -1,3 +1,7 @@
+// Copyright 2021 Amha Mogus. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'package:covid19_app/model/watchlistModel.dart';
 import 'package:covid19_app/view/launcher.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +20,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Covid Watchlist',
         theme: ThemeData(
-            // text
+          // text
             textTheme:
-                GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
+            GoogleFonts.quicksandTextTheme(Theme.of(context).textTheme),
             // colors
             brightness: Brightness.dark,
             primaryColor: Color(0xFF8B7CFF),

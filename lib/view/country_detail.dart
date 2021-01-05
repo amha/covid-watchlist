@@ -1,3 +1,7 @@
+// Copyright 2021 Amha Mogus. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'dart:convert';
 import 'dart:core';
 
@@ -116,7 +120,7 @@ class _CountryDetailState extends State<CountryDetail> {
                                     vertical: 16, horizontal: 16),
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                                   color: Color(0xFF8B7CFF),
                                 ),
                                 height: 240,
@@ -155,35 +159,35 @@ class _CountryDetailState extends State<CountryDetail> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: widget.model.inWatchList
             ? FloatingActionButton.extended(
-                onPressed: () {
-                  Provider.of<WatchlistModel>(context, listen: false)
-                      .removeCountry(widget.model);
-                  _showMyDialog(false);
-                  setState(() {
-                    widget.model.inWatchList = false;
-                    stats = stats;
-                  });
-                },
-                label: Text("Remove from watchlist"),
-                backgroundColor: Color(0xFFDAC9FF),
-                foregroundColor: Colors.black,
-              )
+          onPressed: () {
+            Provider.of<WatchlistModel>(context, listen: false)
+                .removeCountry(widget.model);
+            _showMyDialog(false);
+            setState(() {
+              widget.model.inWatchList = false;
+              stats = stats;
+            });
+          },
+          label: Text("Remove from watchlist"),
+          backgroundColor: Color(0xFFDAC9FF),
+          foregroundColor: Colors.black,
+        )
             : FloatingActionButton.extended(
           onPressed: () {
-                  Provider.of<WatchlistModel>(context, listen: false)
-                      .addCountry(widget.model);
-                  _showMyDialog(true);
-                  setState(() {
-                    widget.model.inWatchList = true;
-                    stats = stats;
-                  });
-                },
-                label: Text(
-                  "Add to Watchlist",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                backgroundColor: Theme.of(context).accentColor,
-              ));
+            Provider.of<WatchlistModel>(context, listen: false)
+                .addCountry(widget.model);
+            _showMyDialog(true);
+            setState(() {
+              widget.model.inWatchList = true;
+              stats = stats;
+            });
+          },
+          label: Text(
+            "Add to Watchlist",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          backgroundColor: Theme.of(context).accentColor,
+        ));
   }
 
   Future<void> _showMyDialog(bool isConfirmation) async {

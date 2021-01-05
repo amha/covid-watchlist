@@ -1,3 +1,7 @@
+// Copyright 2021 Amha Mogus. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 final Map<String, List> suggestions = {
   'Ethiopia': ["Ethiopia", "ET", "10", "20", "30", "40", "50", "60"],
   'USA': ["USA", "USA", "10", "20", "30", "40", "50", "60"]
@@ -25,8 +29,7 @@ class Country {
   int population;
   bool inWatchList;
 
-  Country(
-      String name,
+  Country(String name,
       String code,
       String newConfirmed,
       String totalConfirmed,

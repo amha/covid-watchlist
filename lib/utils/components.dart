@@ -1,3 +1,7 @@
+// Copyright 2021 Amha Mogus. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'package:flutter/material.dart';
 
 Widget sectionTitle(String title) {
@@ -11,8 +15,7 @@ Widget sectionTitle(String title) {
   );
 }
 
-Widget bigNumber(
-    BuildContext context, String label, String value, bool showBox) {
+Widget bigNumber(BuildContext context, String label, String value, bool showBox) {
   return Container(
     height: 100,
     width: MediaQuery.of(context).size.width - 40,

@@ -1,3 +1,7 @@
+// Copyright 2021 Amha Mogus. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'package:covid19_app/model/country.dart';
 import 'package:covid19_app/model/covid_statistic.dart';
 import 'package:covid19_app/model/watchlistModel.dart';
@@ -29,7 +33,7 @@ class _WatchlistState extends State<Watchlist> {
 
   int bottomNavigationIndex = 0;
   PageController controller =
-      new PageController(initialPage: 0, keepPage: true);
+  new PageController(initialPage: 0, keepPage: true);
 
   @override
   void initState() {
@@ -121,10 +125,10 @@ class _WatchlistState extends State<Watchlist> {
                       label: 'Safety Tips'),
                 ],
                 onTap: (index) => {
-                      controller.animateToPage(index,
-                          duration: Duration(microseconds: 500),
-                          curve: Curves.ease)
-                    }),
+                  controller.animateToPage(index,
+                      duration: Duration(microseconds: 500),
+                      curve: Curves.ease)
+                }),
           ),
         );
       },
@@ -142,69 +146,69 @@ class _WatchlistState extends State<Watchlist> {
         builder: (context, watchlist, child) => (watchlist.items.length == 0)
             ? _buildEmptyWatchlistScreen(context)
             : ListView.builder(
-                itemCount: watchlist.items.length,
-                itemExtent: 80,
-                itemBuilder: (context, index) => ListTileTheme(
-                      contentPadding: EdgeInsets.all(16),
-                      textColor: Colors.white,
-                      child: ListTile(
-                        title: Text(
-                          watchlist.items[index].name,
-                          style: TextStyle(fontSize: 20),
+            itemCount: watchlist.items.length,
+            itemExtent: 80,
+            itemBuilder: (context, index) => ListTileTheme(
+              contentPadding: EdgeInsets.all(16),
+              textColor: Colors.white,
+              child: ListTile(
+                title: Text(
+                  watchlist.items[index].name,
+                  style: TextStyle(fontSize: 20),
+                ),
+                leading: CircleAvatar(
+                    backgroundColor: Color(0xFF332c47),
+                    child: Text(
+                      watchlist.items[index].countryCode.toUpperCase(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                subtitle: Text("Total Deaths: " +
+                    watchlist.items[index].totalDeaths),
+                trailing: Container(
+                  width: 85,
+                  padding:
+                  EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFDAC9FF),
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(8))),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: 85,
+                        child: Text(
+                          "NEW CASES",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
                         ),
-                        leading: CircleAvatar(
-                            backgroundColor: Color(0xFF332c47),
-                            child: Text(
-                              watchlist.items[index].countryCode.toUpperCase(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                        subtitle: Text("Total Deaths: " +
-                            watchlist.items[index].totalDeaths),
-                        trailing: Container(
-                          width: 85,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                          decoration: BoxDecoration(
-                              color: Color(0xFFDAC9FF),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerRight,
-                                width: 85,
-                                child: Text(
-                                  "NEW CASES",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerRight,
-                                width: 85,
-                                child: Text(
-                                  watchlist.items[index].newConfirmed,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  CountryDetail(watchlist.items[index])));
-                        },
                       ),
-                    )));
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: 85,
+                        child: Text(
+                          watchlist.items[index].newConfirmed,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CountryDetail(watchlist.items[index])));
+                },
+              ),
+            )));
   }
 
   _buildEmptyWatchlistScreen(BuildContext context) {
